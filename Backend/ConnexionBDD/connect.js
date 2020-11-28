@@ -19,5 +19,9 @@ connection.query("SELECT * FROM User", function (error, results, fields) {
   if (error) throw error;
   console.log("The solution is: ", results);
 });
+connection.query("SELECT * FROM Poster", function (error, results, fields) {
+  if (error) throw error;
+  console.log("The solution is: ", results);
+});
 
 module.exports = connection;

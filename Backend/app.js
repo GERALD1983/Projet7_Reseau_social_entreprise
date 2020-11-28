@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-require("./ConnexionBDD/connect");
+//const connection = require("./ConnexionBDD/connect");
 
-//const model = require("./models/users");
+const userRoutes = require("./routes/users");
 
 const app = express();
 console.log("salut");
@@ -21,5 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+app.use(userRoutes);
 
 module.exports = app;
