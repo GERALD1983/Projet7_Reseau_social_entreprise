@@ -5,22 +5,22 @@ const router = express.Router();
 
 const postes = require("../controllers/post");
 
-// Create a new User
+// Create a new Poste
 router.post("/poste", postes.create);
 
-// Retrieve all Users
+// Retrieve all Postes
 router.get("/postes", postes.findAll);
 
-// Retrieve a single User with userId
-router.get("/postes/:posteId", postes.findOne);
+// Retrieve a single Poste with posteId
+router.get("/poste/:posteId", postes.findOne);
 
-// Update a User with userId
-router.put("/postes/:posteId", postes.update);
+// Update a Poste with posteId
+router.put("/poste/:posteId", postes.update);
 
-// Delete a User with userId
-router.delete("/postes/:posteId", postes.delete);
+// Delete a Poste with posteId
+router.delete("/poste/:posteId", postes.delete);
 
-// Delete all Users
+// Delete all Postes
 router.delete("/postes", postes.deleteAll);
 
 module.exports = router;

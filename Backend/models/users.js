@@ -5,46 +5,25 @@ const connection = require("../ConnexionBDD/connect");
 const User = function (user) {
   this.email = user.email;
   this.mdp = user.mdp;
-  this.pseudo = user.pseudo;
+  this.nom = user.nom;
+  this.prenom = user.prenom;
 };
-/*
-exports.createUser = function createUser() {
+
+User.create = (newUser, result) => {
   connection.query(
-    "INSERT INTO User (email,mdp,pseudo) VALUES ('george@outlook.fr','testing','george');",
-    function (error, results, fields) {
-      if (error) throw error;
-      console.log("create this user: ", results);
+    "INSERT INTO User SET ?, date_cree = NOW()",
+    newUser,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("created user: ", { id: res.insertId, ...newUser });
+      result(null, { id: res.insertId, ...newUser });
     }
   );
-};
-
-exports.updateUser = connection.query(
-  "UPDATE User SET pseudo= 'maria', mdp= 'testing' WHERE email= 'marie@outlook.fr'",
-  function (error, results, fields) {
-    if (error) throw error;
-    console.log("create this user: ", results);
-  }
-);
-
-exports.deleteUser = connection.query(
-  "DELETE FROM User WHERE pseudo= 'george'",
-  function (error, results, fields) {
-    if (error) throw error;
-    console.log("create this user: ", results);
-  }
-);
-*/
-User.create = (newUser, result) => {
-  connection.query("INSERT INTO User SET ?", newUser, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    console.log("created user: ", { id: res.insertId, ...newUser });
-    result(null, { id: res.insertId, ...newUser });
-  });
 };
 
 User.findById = (userId, result) => {
@@ -66,6 +45,8 @@ User.findById = (userId, result) => {
   });
 };
 
+module.exports = User;
+/*
 User.getAll = (result) => {
   connection.query("SELECT * FROM user", (err, res) => {
     if (err) {
@@ -81,8 +62,8 @@ User.getAll = (result) => {
 
 User.updateById = (id, user, result) => {
   connection.query(
-    "UPDATE User SET email = ?, mdp = ?, pseudo = ? WHERE id = ?",
-    [user.email, user.mdp, user.pseudo, id],
+    "UPDATE User SET email = ?, mdp = ?, nom = ?, prenom = ? WHERE id = ?",
+    [user.email, user.mdp, user.nom, user.prenom, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -133,5 +114,4 @@ User.removeAll = (result) => {
     result(null, res);
   });
 };
-
-module.exports = User;
+*/
