@@ -8,21 +8,25 @@ const Poste = function (poste) {
   this.nb_commentaires = poste.nb_commentaires;
   this.nb_likes = poste.nb_likes;
   this.user_id = poste.user_id;
-  this.date_cree = poste.date_cree;
   this.nb_dislikes = poste.nb_dislikes;
+  //this.date_cree = poste.date_cree;
 };
 
 Poste.create = (newPoste, result) => {
-  connection.query("INSERT INTO Poster SET ?", newPoste, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
+  connection.query(
+    `INSERT INTO Poster SET ?, date_cree = NOW()`,
+    newPoste,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
 
-    console.log("created poste: ", { id: res.insertId, ...newPoste });
-    result(null, { id: res.insertId, ...newPoste });
-  });
+      console.log("created poste: ", { id: res.insertId, ...newPoste });
+      result(null, { id: res.insertId, ...newPoste });
+    }
+  );
 };
 
 Poste.findById = (posteId, result) => {
@@ -44,23 +48,33 @@ Poste.findById = (posteId, result) => {
   });
 };
 
-User.getAll = (result) => {
-  connection.query("SELECT * FROM user", (err, res) => {
+Poste.getAll = (result) => {
+  connection.query("SELECT * FROM Poster", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log("users: ", res);
+    console.log("postes: ", res);
     result(null, res);
   });
 };
 
-User.updateById = (id, user, result) => {
+Poste.updateById = (id, poste, result) => {
   connection.query(
-    "UPDATE User SET email = ?, mdp = ?, pseudo = ? WHERE id = ?",
-    [user.email, user.mdp, user.pseudo, id],
+    "UPDATE Poster SET titre = ?, description = ?, image_link = ?, nb_commentaires = ?, nb_likes = ?, nb_dislikes = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
+    [
+      poste.titre,
+      poste.description,
+      poste.image_link,
+      poste.nb_commentaires,
+      poste.nb_likes,
+      poste.nb_dislikes,
+      poste.user_id,
+      //poste.date_cree,
+      id,
+    ],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -69,19 +83,19 @@ User.updateById = (id, user, result) => {
       }
 
       if (res.affectedRows == 0) {
-        // not found User with the id
+        // not found Poste with the id
         result({ kind: "not_found" }, null);
         return;
       }
 
-      console.log("updated user: ", { id: id, ...user });
-      result(null, { id: id, ...user });
+      console.log("updated poste: ", { id: id, ...poste });
+      result(null, { id: id, ...poste });
     }
   );
 };
 
-User.remove = (id, result) => {
-  connection.query("DELETE FROM User WHERE id = ?", id, (err, res) => {
+Poste.remove = (id, result) => {
+  connection.query("DELETE FROM Poster WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -89,25 +103,25 @@ User.remove = (id, result) => {
     }
 
     if (res.affectedRows == 0) {
-      // not found User with the id
+      // not found Poste with the id
       result({ kind: "not_found" }, null);
       return;
     }
 
-    console.log("deleted user with id: ", id);
+    console.log("deleted poste with id: ", id);
     result(null, res);
   });
 };
 
-User.removeAll = (result) => {
-  connection.query("DELETE FROM user", (err, res) => {
+Poste.removeAll = (result) => {
+  connection.query("DELETE FROM Poster", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log(`deleted ${res.affectedRows} users`);
+    console.log(`deleted ${res.affectedRows} postes`);
     result(null, res);
   });
 };
