@@ -63,14 +63,11 @@ Poste.getAll = (result) => {
 
 Poste.updateById = (id, poste, result) => {
   connection.query(
-    "UPDATE Poster SET titre = ?, description = ?, image_link = ?, nb_commentaires = ?, nb_likes = ?, nb_dislikes = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
+    "UPDATE Poster SET titre = ?, description = ?, image_link = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
     [
       poste.titre,
       poste.description,
       poste.image_link,
-      poste.nb_commentaires,
-      poste.nb_likes,
-      poste.nb_dislikes,
       poste.user_id,
       //poste.date_cree,
       id,
@@ -124,6 +121,60 @@ Poste.removeAll = (result) => {
     console.log(`deleted ${res.affectedRows} postes`);
     result(null, res);
   });
+};
+
+Poste.likeById = (id, poste, result) => {
+  connection.query(
+    "UPDATE Poster SET  nb_likes = ?, WHERE id = ?",
+    [
+      poste.nb_likes,
+      //poste.date_cree,
+      id,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Poste with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated poste: ", { id: id, ...poste });
+      result(null, { id: id, ...poste });
+    }
+  );
+};
+
+Poste.dislikeById = (id, poste, result) => {
+  connection.query(
+    "UPDATE Poster SET  nb_dislikes = ?, WHERE id = ?",
+    [
+      poste.nb_dislikes,
+      //poste.date_cree,
+      id,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Poste with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated poste: ", { id: id, ...poste });
+      result(null, { id: id, ...poste });
+    }
+  );
 };
 
 module.exports = Poste;
