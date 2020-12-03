@@ -11,6 +11,7 @@ const Commentaire = function (commentaire) {
 Commentaire.create = (newCommentaire, result) => {
   connection.query(
     `INSERT INTO Commentaires SET ?, date_cree = NOW()`,
+    // UPDATE Poster INNER JOIN Commentaires ON commentaires.post_id = poster.id SET nb_commentaires = nb_commentaires +1
     newCommentaire,
     (err, res) => {
       if (err) {
@@ -65,10 +66,9 @@ Commentaire.getAll = (result) => {
 
 Commentaire.updateById = (id, commentaire, result) => {
   connection.query(
-    "UPDATE Commentaires SET comment = ?, post_id = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
+    "UPDATE Commentaires SET comment = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
     [
       commentaire.comment,
-      commentaire.post_id,
       commentaire.user_id,
       //commentaire.date_cree,
       id,
