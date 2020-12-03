@@ -36,7 +36,7 @@
         <input class="form-control" type="text" name="mdp" />
         <br />
         <button class="btn btn-light text-primary" type="submit">
-          Inscription
+          Se connecter
         </button>
       </div>
     </form>
