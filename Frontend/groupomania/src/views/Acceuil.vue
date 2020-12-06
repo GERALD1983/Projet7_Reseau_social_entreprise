@@ -1,8 +1,21 @@
 <template>
   <div id="app">
-    <router-view />
+    <Signup />
   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import Signup from "../components/signup.vue";
+
+export default {
+  name: "Acceuil",
+
+  components: {
+    Signup,
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
