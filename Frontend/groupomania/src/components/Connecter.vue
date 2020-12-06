@@ -12,10 +12,15 @@
       />
       <br />
       <br />
+      <!--  <p class="text-white">S'inscrire</p> -->
 
-      <p class="text-white">S'inscrire</p>
+      <!-- <p class="stopPadMarg text-white">Se connecter</p> <router-link class="text-white" to="/login">login</router-link>-->
+      <!--  <p class="text-white">S'inscrire</p> -->
+      <router-link class="text-white" to="/">S'inscrire</router-link>
       <br />
-      <p class="stopPadMarg text-white">Se connecter</p>
+      <br />
+      <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
+      <router-link class="text-white" to="/login">Login</router-link>
     </div>
     <form class=" bg-primary col-lg-4" action="post">
       <div class="hauteur stopPadMarg form-group">
@@ -43,9 +48,5 @@
     <div class="bg-primary col-sm-2"></div>
   </section>
 </template>
-
-<script>
-export default {};
-</script>
 
 <style></style>
