@@ -1,11 +1,19 @@
 <template>
   <form class="needs-validation" novalidate>
-    <img
-      src="../assets/image/photo3.jpg"
-      width="140px"
-      class="bordureProfil rounded-circle"
-      alt="logo"
-    />
+    <div class="d-flex align-item-center justify-content-between">
+      <img
+        src="../assets/image/photo3.jpg"
+        width="140px"
+        class=" bordureProfil rounded-circle"
+        alt="logo"
+      />
+      <div>
+        <button class="mt-3 btn btn-sm btn-outline-danger" type="submit">
+          Supprimer profil <b-icon icon="exclamation-triangle"></b-icon>
+        </button>
+      </div>
+    </div>
+
     <div class="form-row">
       <div class="col-md-6 mb-3">
         <label for="validationCustom01">First name</label>
