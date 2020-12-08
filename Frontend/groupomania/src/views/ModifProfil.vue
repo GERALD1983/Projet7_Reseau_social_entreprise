@@ -1,11 +1,22 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div>
+    <Navigation />
+    <Profil />
   </div>
 </template>
 
 <script>
-export default {};
+// @ is an alias to /src
+import Navigation from "../components/nav";
+import Profil from "../components/profil";
+
+export default {
+  name: "profil",
+  components: {
+    Navigation,
+    Profil,
+  },
+};
 </script>
 
 <style lang="scss">
