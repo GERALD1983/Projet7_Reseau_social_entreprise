@@ -1,7 +1,7 @@
 <template>
-  <div class=" d-flex my-5 align-items-center justify-content-center col-md-6">
+  <div class=" d-flex my-5 align-items-center justify-content-center ">
     <div
-      class="container-fluid stopPadMarg d-flex align-items-center justify-content-center card bordurePost border-primary rounded shadow"
+      class=" d-flex align-items-center justify-content-center card bordurePost bordureRond border-primary shadow"
     >
       <div class="card-body p-3 container-fluid">
         <div class="d-flex">

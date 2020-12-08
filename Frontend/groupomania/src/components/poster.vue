@@ -10,7 +10,11 @@
         alt="logo"
       />
     </div>
-    <Carte />
+    <div>
+      <Envoyer />
+      <Carte />
+    </div>
+
     <div class="py-5 stopPadMarg bg-primary col-md-1">
       <img
         src="../assets/image/icon.png"
@@ -23,8 +27,10 @@
 </template>
 <script>
 import Carte from "./carte";
+import Envoyer from "./envoyer";
 export default {
   components: {
+    Envoyer,
     Carte,
   },
 };
