@@ -4,8 +4,41 @@
 .mi-hauteur {
   height: 50vh;
 }
+.hauteur75 {
+  height: 75%;
+}
+.hauteur85 {
+  height: 85%;
+}
+.hauteur100 {
+  height: 100%;
+}
 
 .stopPadMarg {
   padding: 0;
   margin: 0;
+}
+.largeur100 {
+  width: 100%;
+}
+.cube100 {
+  width: 100px;
+  height: 100px;
+}
+.cubeImage {
+  width: 35em;
+  height: 20em;
+}
+
+.bordureProfil {
+  border: 3mm ridge #ffd7d7ff;
+}
+.bordurePost {
+  border: 1.5mm ridge rgba(170, 50, 220, 0.6);
+}
+.backPrimaire {
+  background-color: #ffd7d7ff;
+}
+.save {
+  background-color: #ffd7d7ff;
 }
