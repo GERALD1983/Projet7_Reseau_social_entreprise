@@ -45,8 +45,6 @@ User.findById = (userId, result) => {
   });
 };
 
-module.exports = User;
-/*
 User.getAll = (result) => {
   connection.query("SELECT * FROM user", (err, res) => {
     if (err) {
@@ -114,4 +112,5 @@ User.removeAll = (result) => {
     result(null, res);
   });
 };
-*/
+
+module.exports = User;

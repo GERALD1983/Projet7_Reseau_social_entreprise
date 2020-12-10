@@ -1,14 +1,16 @@
 import Vue from "vue";
+import Vuelidate from "vuelidate";
+import axios from "axios";
 import App from "./App.vue";
 //import Acceuil from "./views/Acceuil.vue";
 //import Login from "./views/Login.vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import axios from "axios";
 
 import "./assets/custom.scss";
 import "./assets/style.css";
 import router from "./router";
 
+Vue.use(Vuelidate);
 Vue.use(axios);
 // Install BootstrapVue
 Vue.use(BootstrapVue);
