@@ -33,6 +33,12 @@ export default {
     Envoyer,
     Carte,
   },
+  data() {
+    return {
+      posts: [],
+    };
+  },
+  methods: {},
 };
 </script>
 

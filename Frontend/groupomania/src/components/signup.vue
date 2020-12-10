@@ -19,31 +19,107 @@
       <br />
       <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
       <router-link class="text-white" to="/login">Login</router-link>
-      <br />
-      <br />
-      <router-link class="text-white" to="/post">Poster</router-link>
     </div>
-    <form class=" bg-primary col-lg-4" action="post">
-      <div class="hauteur stopPadMarg form-group">
+    <div class="bg-primary stopPadMarg col-lg-4">
+      <form @submit.prevent="submit" class="col-md-12">
         <img
           src="../assets/image/icon-left-font-monochrome-white.png"
           width="200"
           alt="logo-titre"
         />
-        <br />
-        <label class="text-white" for="email">
-          Email
-        </label>
-        <br />
-        <input class="form-control" type="text" name="email" />
-        <br />
-        <label class="text-white" for="mdp">Mot de passe </label>
-        <br />
-        <input class="form-control" type="text" name="mdp" />
-        <br />
-        <button class="btn btn-light text-primary" type="submit">
+        <div class=" form-group">
+          <label class="text-white" for="nom">
+            Nom
+          </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="nom"
+            v-model.trim="$v.nom.$model"
+          />
+        </div>
+        <div class="error" v-if="!$v.nom.required">
+          Field is required
+        </div>
+        <div class="error" v-if="!$v.nom.alpha">
+          nom ne doit contenir que des lettres alphabetiques pas d'accent
+        </div>
+        <div class="error" v-if="!$v.nom.maxLength">
+          Max. {{ $v.nom.$params.maxLength.max }} letters.
+        </div>
+
+        <div class=" form-group">
+          <label class="text-white" for="prenom">
+            Prenom
+          </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="prenom"
+            v-model.trim="$v.prenom.$model"
+          />
+        </div>
+        <div class="error" v-if="!$v.prenom.required">Field is required</div>
+        <div class="error" v-if="!$v.prenom.alpha">
+          prenom ne doit contenir que des lettres alphabetiques pas d'accent
+        </div>
+        <div class="error" v-if="!$v.prenom.maxLength">
+          Max. {{ $v.prenom.$params.maxLength.max }} letters.
+        </div>
+
+        <div class=" form-group">
+          <label class="text-white" for="email">
+            Email
+          </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="email"
+            v-model.trim="$v.email.$model"
+          />
+        </div>
+        <div class="error" v-if="!$v.email.required">
+          Field is required
+        </div>
+        <div class="error" v-if="!$v.email.email">
+          écrire un email valide ex: marty@hotmail.com
+        </div>
+
+        <div class=" form-group">
+          <label class="text-white" for="mdp">Mot de passe </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="mdp"
+            v-model.trim="$v.mdp.$model"
+          />
+        </div>
+        <div class="error" v-if="!$v.mdp.required">Field is required</div>
+        <div class="error" v-if="!$v.mdp.minLength">
+          Min. {{ $v.mdp.$params.minLength.min }} letters.
+        </div>
+        <div class="error" v-if="!$v.mdp.strongPassword || !$v.mdp.alphaNum">
+          Mot de passe doit contenir chiffre et lettre sans charactere speciaux
+        </div>
+
+        <button
+          class="btn btn-light text-primary"
+          type="submit"
+          :disabled="submitStatus === 'PENDING'"
+        >
           Incription
         </button>
+        <p class="typo__p" v-if="submitStatus === 'OK'">
+          Thanks for your submission!
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'ERROR'">
+          Please fill the form correctly.
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
 
         <br />
         <br />
@@ -51,27 +127,85 @@
           mettre a jour test
         </button>
         <ul>
-          <li v-for="post in posts" v-bind:key="post">{{ post }}</li>
+          <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
         </ul>
-      </div>
-    </form>
+      </form>
+    </div>
     <div class="bg-primary col-sm-2"></div>
   </section>
 </template>
 
 <script>
+import {
+  required,
+  minLength,
+  email,
+  maxLength,
+  alpha,
+  alphaNum,
+} from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   data() {
     return {
-      posts: ["post1", "post2", "post3"],
+      users: Array,
+      nom: "",
+      prenom: "",
+      email: "",
+      mdp: "",
+      submitStatus: null,
     };
   },
+  validations: {
+    nom: { required, alpha, maxLength: maxLength(30) },
+    prenom: { required, alpha, maxLength: maxLength(30) },
+    email: { required, email },
+    mdp: {
+      required,
+      alphaNum,
+      minLength: minLength(8),
+      strongPassword(mdp) {
+        return (
+          /[a-z]/.test(mdp) && // checks for a-z
+          /[0-9]/.test(mdp) && // checks for 0-9
+          mdp.length >= 8
+        );
+      },
+    },
+  },
   methods: {
+    submit() {
+      console.log("requete ver serveur!");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+        console.log("A echouer informations non complete!");
+      } else {
+        // do your submit logic here
+        console.log("Reussi tout a bien été recu");
+        this.submitStatus = "PENDING";
+
+        axios
+          .post("http://localhost:3000/signup", {
+            email: this.email,
+            mdp: this.mdp,
+            nom: this.nom,
+            prenom: this.prenom,
+          })
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+
+        setTimeout(() => {
+          this.submitStatus = "OK";
+        }, 500);
+      }
+    },
     update() {
+      this.users = [];
       axios
-        .get("http://localhost:3000/commentaires")
-        .then((response) => console.log(response.data));
+        .get("http://localhost:3000/users")
+        .then((response) => (this.users = response.data))
+        .catch((error) => console.log(error));
     },
   },
 };

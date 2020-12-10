@@ -42,9 +42,9 @@ exports.login = (req, res) => {
     } else res.send(data);
   });
 };
-/*
+
 // Retrieve all Users from the database.
-exports.findAll = (req, res) => {
+exports.findAllUsers = (req, res) => {
   User.getAll((err, data) => {
     if (err)
       res.status(500).send({
@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
 };
 
 // Update a User identified by the userId in the request
-exports.update = (req, res) => {
+exports.updateUser = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -79,7 +79,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a User with the specified userId in the request
-exports.delete = (req, res) => {
+exports.deleteUser = (req, res) => {
   User.remove(req.params.userId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -96,7 +96,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Users from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAllUsers = (req, res) => {
   User.removeAll((err, data) => {
     if (err)
       res.status(500).send({
@@ -105,4 +105,3 @@ exports.deleteAll = (req, res) => {
     else res.send({ message: `All Users were deleted successfully!` });
   });
 };
-*/
