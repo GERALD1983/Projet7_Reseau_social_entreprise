@@ -20,7 +20,7 @@
       <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
       <router-link class="text-white" to="/login">Login</router-link>
     </div>
-    <div class="bg-primary stopPadMarg col-lg-4">
+    <div class="bg-primary text-white stopPadMarg col-lg-4">
       <form @submit.prevent="submit" class="col-md-12">
         <img
           src="../assets/image/icon-left-font-monochrome-white.png"
@@ -39,7 +39,7 @@
             v-model.trim="$v.nom.$model"
           />
         </div>
-        <div class="error" v-if="!$v.nom.required">
+        <div class="error" v-if="!$v.nom.required && submitStatus === 'ERROR'">
           Field is required
         </div>
         <div class="error" v-if="!$v.nom.alpha">
@@ -61,7 +61,12 @@
             v-model.trim="$v.prenom.$model"
           />
         </div>
-        <div class="error" v-if="!$v.prenom.required">Field is required</div>
+        <div
+          class="error"
+          v-if="!$v.prenom.required && submitStatus === 'ERROR'"
+        >
+          Field is required
+        </div>
         <div class="error" v-if="!$v.prenom.alpha">
           prenom ne doit contenir que des lettres alphabetiques pas d'accent
         </div>
@@ -81,11 +86,17 @@
             v-model.trim="$v.email.$model"
           />
         </div>
-        <div class="error" v-if="!$v.email.required">
+        <div
+          class="error"
+          v-if="!$v.email.required && submitStatus === 'ERROR'"
+        >
           Field is required
         </div>
+        <div class="error" v-if="!$v.email.maxLength">
+          Max. {{ $v.email.$params.maxLength.max }} letters.
+        </div>
         <div class="error" v-if="!$v.email.email">
-          écrire un email valide ex: marty@hotmail.com
+          écrire un email valide ex: marty@hotmail.com (sans Majuscules!)
         </div>
 
         <div class=" form-group">
@@ -98,12 +109,23 @@
             v-model.trim="$v.mdp.$model"
           />
         </div>
-        <div class="error" v-if="!$v.mdp.required">Field is required</div>
+        <div class="error" v-if="!$v.mdp.required && submitStatus === 'ERROR'">
+          Field is required
+        </div>
+        <div class="error" v-if="!$v.mdp.maxLength">
+          Max. {{ $v.mdp.$params.maxLength.max }} letters.
+        </div>
         <div class="error" v-if="!$v.mdp.minLength">
           Min. {{ $v.mdp.$params.minLength.min }} letters.
         </div>
-        <div class="error" v-if="!$v.mdp.strongPassword || !$v.mdp.alphaNum">
-          Mot de passe doit contenir chiffre et lettre sans charactere speciaux
+        <div class="error" v-if="!$v.mdp.alphaNum">
+          Que des chiffres et lettres pas de caractere speciaux
+        </div>
+        <div
+          class="error"
+          v-if="!$v.mdp.strongPassword && submitStatus === 'ERROR'"
+        >
+          Mot de passe doit contenir chiffre et lettre sans espace
         </div>
 
         <button
@@ -118,6 +140,9 @@
         </p>
         <p class="typo__p" v-if="submitStatus === 'ERROR'">
           Please fill the form correctly.
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'ERROR SERVEUR'">
+          erreur serveur: erreur saisie email existe déjà ou serveur HS !
         </p>
         <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
 
@@ -159,14 +184,16 @@ export default {
   validations: {
     nom: { required, alpha, maxLength: maxLength(30) },
     prenom: { required, alpha, maxLength: maxLength(30) },
-    email: { required, email },
+    email: { required, email, maxLength: maxLength(40) },
     mdp: {
       required,
-      alphaNum,
+      maxLength: maxLength(30),
       minLength: minLength(8),
+      alphaNum,
       strongPassword(mdp) {
         return (
-          /[a-z]/.test(mdp) && // checks for a-z
+          /[a-zA-Z]/.test(mdp) && // checks for a-z
+          /^\S+$/.test(mdp) &&
           /[0-9]/.test(mdp) && // checks for 0-9
           mdp.length >= 8
         );
@@ -192,12 +219,14 @@ export default {
             nom: this.nom,
             prenom: this.prenom,
           })
-          .then((response) => console.log(response))
-          .catch((error) => console.log(error));
-
-        setTimeout(() => {
-          this.submitStatus = "OK";
-        }, 500);
+          .then(
+            (response) => ((this.submitStatus = "OK"), console.log(response))
+          )
+          .catch(
+            (error) => (
+              (this.submitStatus = "ERROR SERVEUR"), console.log(error)
+            )
+          );
       }
     },
     update() {

@@ -10,7 +10,7 @@ const users = require("../controllers/users");
 router.post("/signup", verifyPassword, verifyEmail, users.signup);
 
 // Retrieve a single User with userId
-router.get("/login/:userId", users.login);
+router.post("/login", users.login);
 
 // Retrieve all Users
 router.get("/users", users.findAllUsers);

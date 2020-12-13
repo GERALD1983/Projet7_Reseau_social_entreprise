@@ -8,7 +8,7 @@ const User = function (user) {
   this.nom = user.nom;
   this.prenom = user.prenom;
 };
-
+/*
 User.create = (newUser, result) => {
   connection.query(
     "INSERT INTO User SET ?, date_cree = NOW()",
@@ -25,7 +25,8 @@ User.create = (newUser, result) => {
     }
   );
 };
-
+*/
+/*
 User.findById = (userId, result) => {
   connection.query(`SELECT * FROM User WHERE id = ${userId}`, (err, res) => {
     if (err) {
@@ -44,7 +45,7 @@ User.findById = (userId, result) => {
     result({ kind: "not_found" }, null);
   });
 };
-
+*/
 User.getAll = (result) => {
   connection.query("SELECT * FROM user", (err, res) => {
     if (err) {
