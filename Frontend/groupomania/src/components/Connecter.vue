@@ -22,31 +22,167 @@
       <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
       <router-link class="text-white" to="/login">Login</router-link>
     </div>
-    <form class=" bg-primary col-lg-4" action="post">
-      <div class="hauteur stopPadMarg form-group">
+    <div class="bg-primary text-white stopPadMarg col-lg-4">
+      <form @submit.prevent="submit" class="col-md-12">
         <img
           src="../assets/image/icon-left-font-monochrome-white.png"
           width="200"
           alt="logo-titre"
         />
-        <br />
-        <label class="text-white" for="email">
-          Email
-        </label>
-        <br />
-        <input class="form-control" type="text" name="email" />
-        <br />
-        <label class="text-white" for="mdp">Mot de passe </label>
-        <br />
-        <input class="form-control" type="text" name="mdp" />
-        <br />
-        <button class="btn btn-light text-primary" type="submit">
-          Se connecter
+        <div class=" form-group">
+          <label class="text-white" for="email">
+            Email
+          </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="email"
+            v-model.trim="$v.email.$model"
+          />
+        </div>
+        <div
+          class="error"
+          v-if="!$v.email.required && submitStatus === 'ERROR'"
+        >
+          Field is required
+        </div>
+        <div class="error" v-if="!$v.email.email">
+          écrire un email valide ex: marty@hotmail.com
+        </div>
+
+        <div class=" form-group">
+          <label class="text-white" for="mdp">Mot de passe </label>
+
+          <input
+            class="form-control"
+            type="text"
+            name="mdp"
+            v-model.trim="$v.mdp.$model"
+          />
+        </div>
+        <div class="error" v-if="!$v.mdp.required && submitStatus === 'ERROR'">
+          Field is required
+        </div>
+        <div class="error" v-if="!$v.mdp.maxLength">
+          Max. {{ $v.mdp.$params.maxLength.max }} letters.
+        </div>
+        <div class="error" v-if="!$v.mdp.minLength">
+          Min. {{ $v.mdp.$params.minLength.min }} letters.
+        </div>
+        <div class="error" v-if="!$v.mdp.alphaNum">
+          Que des chiffres et lettres pas de caractere speciaux
+        </div>
+        <div
+          class="error"
+          v-if="!$v.mdp.strongPassword && submitStatus === 'ERROR'"
+        >
+          Mot de passe doit contenir chiffre et lettre sans espace
+        </div>
+
+        <button
+          class="btn btn-light text-primary"
+          type="submit"
+          :disabled="submitStatus === 'PENDING'"
+        >
+          Se Connecter
         </button>
-      </div>
-    </form>
+        <p class="typo__p" v-if="submitStatus === 'OK'">
+          Thanks for your submission!
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'ERROR'">
+          Please fill the form correctly.
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'ERROR SERVEUR'">
+          erreur serveur:Le mot de passe ou l'email ne correponde pas OU server
+          HS !
+        </p>
+        <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
+
+        <br />
+        <br />
+        <button type="button" v-on:click="update()">
+          mettre a jour test
+        </button>
+        <ul>
+          <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
+        </ul>
+      </form>
+    </div>
     <div class="bg-primary col-sm-2"></div>
   </section>
 </template>
+
+<script>
+import {
+  required,
+  minLength,
+  maxLength,
+  email,
+  alphaNum,
+} from "vuelidate/lib/validators";
+import axios from "axios";
+export default {
+  data() {
+    return {
+      users: Array,
+      email: "",
+      mdp: "",
+      submitStatus: null,
+    };
+  },
+  validations: {
+    email: { required, email },
+    mdp: {
+      required,
+      alphaNum,
+      minLength: minLength(8),
+      maxLength: maxLength(30),
+      strongPassword(mdp) {
+        return (
+          /[a-zA-Z]/.test(mdp) && // checks for a-z
+          /[0-9]/.test(mdp) && // checks for 0-9
+          mdp.length >= 8
+        );
+      },
+    },
+  },
+  methods: {
+    submit() {
+      console.log("requete ver serveur!");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+        console.log("A echouer informations non complete!");
+      } else {
+        // do your submit logic here
+        console.log("En attente");
+        this.submitStatus = "PENDING";
+
+        axios
+          .post("http://localhost:3000/login", {
+            email: this.email,
+            mdp: this.mdp,
+          })
+          .then(
+            (response) => ((this.submitStatus = "OK"), console.log(response))
+          )
+          .catch(
+            (error) => (
+              (this.submitStatus = "ERROR SERVEUR"), console.log(error)
+            )
+          );
+      }
+    },
+    update() {
+      this.users = [];
+      axios
+        .get("http://localhost:3000/users")
+        .then((response) => (this.users = response.data))
+        .catch((error) => console.log(error));
+    },
+  },
+};
+</script>
 
 <style></style>
