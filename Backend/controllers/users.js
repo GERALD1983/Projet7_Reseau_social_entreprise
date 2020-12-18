@@ -108,8 +108,10 @@ exports.login = async (req, res) => {
     if (user) {
       const validPass = await bcrypt.compare(mdp, user.mdp);
       if (validPass) {
-        const token = jwt.sign({ email: email }, "superScretthing");
-        res.status(200).json({ token: token });
+        const token = jwt.sign({ userId: user.id }, "RANDOM_TOKEN_SECRET", {
+          expiresIn: "24h",
+        });
+        res.status(200).json({ userId: user.id, token: token });
       } else {
         res.status(401).json("Wrong password!");
       }
@@ -122,10 +124,8 @@ exports.login = async (req, res) => {
   }
 };
 
-/*
-
 // Find a single User with a userId
-exports.login = (req, res) => {
+exports.findUser = (req, res) => {
   User.findById(req.params.userId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -140,7 +140,6 @@ exports.login = (req, res) => {
     } else res.send(data);
   });
 };
-*/
 
 // Retrieve all Users from the database.
 exports.findAllUsers = (req, res) => {

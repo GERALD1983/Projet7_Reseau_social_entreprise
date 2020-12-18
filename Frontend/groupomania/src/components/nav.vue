@@ -23,14 +23,19 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li v-if="!token" class="nav-item active">
           <router-link class="text-primary nav-link" to="/"
             >S'inscrire</router-link
           >
         </li>
-        <li class="nav-item">
+        <li v-if="!token" class="nav-item">
           <router-link class="text-primary nav-link" to="/login"
             >Login</router-link
+          >
+        </li>
+        <li v-if="token" @click="deconnecte" class="nav-item">
+          <router-link class="text-primary nav-link" to="/logout"
+            >Logout</router-link
           >
         </li>
         <li class="nav-item dropdown">
@@ -102,7 +107,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      token: localStorage.getItem("acces_token"),
+    };
+  },
+  methods: {
+    deconnecte() {
+      localStorage.removeItem("acces_token");
+      localStorage.removeItem("userId");
+      this.$router.push("/login");
+    },
+  },
+};
 </script>
 
 <style></style>

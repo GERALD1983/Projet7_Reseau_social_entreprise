@@ -220,7 +220,11 @@ export default {
             prenom: this.prenom,
           })
           .then(
-            (response) => ((this.submitStatus = "OK"), console.log(response))
+            (response) => (
+              (this.submitStatus = "OK"),
+              console.log(response),
+              this.$router.push("/login")
+            )
           )
           .catch(
             (error) => (
