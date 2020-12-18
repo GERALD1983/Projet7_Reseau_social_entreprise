@@ -2,6 +2,9 @@ import Vue from "vue";
 import Vuelidate from "vuelidate";
 import axios from "axios";
 import App from "./App.vue";
+
+axios.defaults.headers.common["Authorization"] =
+  "Bearer" + " " + localStorage.getItem("acces_token");
 //import Acceuil from "./views/Acceuil.vue";
 //import Login from "./views/Login.vue";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";

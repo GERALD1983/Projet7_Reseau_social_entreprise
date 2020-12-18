@@ -26,9 +26,25 @@
   </section>
 </template>
 <script>
+import axios from "axios";
 import Carte from "./carte";
 import Envoyer from "./envoyer";
 export default {
+  /* async created() {
+    const userId = localStorage.getItem("userId");
+    const response = await axios.get(`http://localhost:3000/user/${userId}`, {
+      headers: {
+        Authorization: "Bearer" + " " + localStorage.getItem("acces_token"),
+      },
+    });
+    console.log(response);
+  },*/
+  async created() {
+    //const userId = localStorage.getItem("userId");
+
+    const response = await axios.get(`http://localhost:3000/postes`);
+    console.log(response);
+  },
   components: {
     Envoyer,
     Carte,
@@ -38,6 +54,7 @@ export default {
       posts: [],
     };
   },
+
   methods: {},
 };
 </script>

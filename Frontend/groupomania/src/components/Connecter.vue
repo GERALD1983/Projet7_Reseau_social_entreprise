@@ -129,6 +129,7 @@ export default {
       email: "",
       mdp: "",
       submitStatus: null,
+      token: localStorage.getItem("acces_token") || null,
     };
   },
   validations: {
@@ -164,9 +165,16 @@ export default {
             email: this.email,
             mdp: this.mdp,
           })
-          .then(
-            (response) => ((this.submitStatus = "OK"), console.log(response))
-          )
+          .then((response) => {
+            const token = (this.token = response.data.token);
+            const userId = response.data.userId;
+
+            localStorage.setItem("acces_token", token),
+              localStorage.setItem("userId", userId),
+              (this.submitStatus = "OK"),
+              console.log(response),
+              this.$router.go("/post");
+          })
           .catch(
             (error) => (
               (this.submitStatus = "ERROR SERVEUR"), console.log(error)
