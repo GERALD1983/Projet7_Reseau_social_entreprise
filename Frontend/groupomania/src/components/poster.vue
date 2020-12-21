@@ -12,6 +12,23 @@
     </div>
     <div>
       <Envoyer />
+      <div>
+        <h3
+          class="backPrimaire opacity mx-1 text-primary bordurePost bordureRond"
+        >
+          <b-icon-chevron-double-down
+            class="mr-5 my-1 pt-1 text-secondary"
+            animation="cylon-vertical"
+            font-scale="1"
+          ></b-icon-chevron-double-down>
+          Derniers Postes
+          <b-icon-chevron-double-down
+            class="ml-5 my-1 pt-1 text-secondary"
+            animation="cylon-vertical"
+            font-scale="1"
+          ></b-icon-chevron-double-down>
+        </h3>
+      </div>
       <Carte />
     </div>
 
@@ -26,7 +43,7 @@
   </section>
 </template>
 <script>
-import axios from "axios";
+//import axios from "axios";
 import Carte from "./carte";
 import Envoyer from "./envoyer";
 export default {
@@ -39,12 +56,14 @@ export default {
     });
     console.log(response);
   },*/
+  /*
   async created() {
     //const userId = localStorage.getItem("userId");
 
     const response = await axios.get(`http://localhost:3000/postes`);
     console.log(response);
   },
+  */
   components: {
     Envoyer,
     Carte,

@@ -4,6 +4,9 @@
 .mi-hauteur {
   height: 50vh;
 }
+.hauteur65 {
+  height: 65%;
+}
 .hauteur75 {
   height: 75%;
 }
@@ -13,10 +16,27 @@
 .hauteur100 {
   height: 100%;
 }
-
+.minwidth25 {
+  width: 25px;
+}
+.minHeight {
+  min-height: 50px;
+}
+.minHeight25 {
+  height: 25px;
+}
+.minHeight30 {
+  height: 30px;
+}
 .stopPadMarg {
   padding: 0;
   margin: 0;
+}
+.largeur80 {
+  width: 80%;
+}
+.largeur95 {
+  width: 95%;
 }
 .largeur100 {
   width: 100%;
@@ -29,7 +49,15 @@
   width: 35em;
   height: 20em;
 }
-
+.m10 {
+  margin: 10%;
+}
+.opacity {
+  opacity: 0.5;
+}
+.stopOpac {
+  opacity: 1;
+}
 .bordureProfil {
   border: 3mm ridge #ffd7d7ff;
 }
@@ -40,8 +68,5 @@
   border-radius: 1em;
 }
 .backPrimaire {
-  background-color: #ffd7d7ff;
-}
-.save {
-  background-color: #ffd7d7ff;
+  background-color: rgb(253, 236, 236);
 }
