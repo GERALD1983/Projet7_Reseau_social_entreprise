@@ -63,12 +63,12 @@ Poste.getAll = (result) => {
 
 Poste.updateById = (id, poste, result) => {
   connection.query(
-    "UPDATE Poster SET titre = ?, description = ?, image_link = ?, user_id = ?, date_modify = NOW() WHERE id = ?",
+    "UPDATE Poster SET titre = ?, description = ?, image_link = ?, date_modify = NOW() WHERE id = ?",
     [
       poste.titre,
       poste.description,
       poste.image_link,
-      poste.user_id,
+      //poste.user_id,
       //poste.date_cree,
       id,
     ],

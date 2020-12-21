@@ -7,6 +7,8 @@ const User = function (user) {
   this.mdp = user.mdp;
   this.nom = user.nom;
   this.prenom = user.prenom;
+  this.image_url = user.image_url;
+  this.ville = user.ville;
 };
 /*
 User.create = (newUser, result) => {
@@ -61,8 +63,16 @@ User.getAll = (result) => {
 
 User.updateById = (id, user, result) => {
   connection.query(
-    "UPDATE User SET email = ?, mdp = ?, nom = ?, prenom = ? WHERE id = ?",
-    [user.email, user.mdp, user.nom, user.prenom, id],
+    `UPDATE User SET nom = ?, prenom = ?, image_url = ?, ville = ?, date_modify = NOW() WHERE id = ?`,
+    [
+      /*user.email,
+      user.mdp,*/
+      user.nom,
+      user.prenom,
+      user.image_url,
+      user.ville,
+      id,
+    ],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
