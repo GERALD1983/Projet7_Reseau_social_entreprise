@@ -29,7 +29,7 @@
           ></b-icon-chevron-double-down>
         </h3>
       </div>
-      <Carte />
+      <CarteChoice />
     </div>
 
     <div class="py-5 stopPadMarg bg-primary col-md-1">
@@ -44,12 +44,12 @@
 </template>
 <script>
 //import axios from "axios";
-import Carte from "./carte";
+import CarteChoice from "./carteChoice";
 import Envoyer from "./envoyer";
 export default {
   components: {
     Envoyer,
-    Carte,
+    CarteChoice,
   },
   data() {
     return {};

@@ -12,7 +12,7 @@
     </div>
     <div class="d-flex align-items-center justify-content-center col-md-7">
       <div
-        class="container d-flex justify-content-center  my-3 hauteur75 card  bordureProfil border-primary bordureRond shadow"
+        class="container d-flex justify-content-center  my-3 hauteur85 card  bordureProfil border-primary bordureRond shadow"
       >
         <FormProfil />
       </div>

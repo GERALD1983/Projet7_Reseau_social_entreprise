@@ -41,6 +41,9 @@
 .largeur100 {
   width: 100%;
 }
+.texte {
+  overflow-wrap: break-word;
+}
 .cube100 {
   width: 100px;
   height: 100px;

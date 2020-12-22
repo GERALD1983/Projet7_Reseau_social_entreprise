@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center">
     <form
       @submit.prevent="submit"
-      class=" my-5 shadow col-md-8 bordurePost bordureRond"
+      class="largeur80 my-5 shadow bordurePost bordureRond"
     >
       <div class="form-group">
         <label class="text-primary" for="titre">Titre du post</label>
@@ -44,12 +44,14 @@
           v-model.trim="$v.image_link.$model"
         />
       </div>
+      <!--
       <div
         class="error"
         v-if="!$v.image_link.required && submitStatus === 'ERROR'"
       >
         Field is required
       </div>
+      -->
       <div
         class="form-group row d-flex align-item-center justify-content-center"
       >
@@ -79,7 +81,7 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   name: "envoyer",
@@ -87,15 +89,15 @@ export default {
     return {
       titre: "",
       description: "",
-      image_link: "",
+      image_link: null || "",
       user_id: localStorage.getItem("userId") || null,
       submitStatus: null,
     };
   },
   validations: {
-    titre: { required },
-    description: { required },
-    image_link: { required },
+    titre: { required, maxLength: maxLength(100) },
+    description: { required, maxLength: maxLength(500) },
+    image_link: {},
   },
   methods: {
     submit() {

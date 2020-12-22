@@ -5,8 +5,12 @@ import Login from "../views/Login.vue";
 import Post from "../views/Post.vue";
 import ModifProfil from "../views/ModifProfil.vue";
 import Data from "../components/Connecter.vue";
+import Profil from "../views/Profil.vue";
+import ProfilChoice from "../views/ProfilChoice.vue";
 
 Vue.use(VueRouter);
+
+//const userProfil = localStorage.getItem("userProfil");
 
 const routes = [
   {
@@ -39,6 +43,22 @@ const routes = [
     },
   },
   {
+    path: "/profil",
+    name: "Profil",
+    component: Profil,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: `/profil/1`, //${userProfil}
+    name: "ProfilUser",
+    component: ProfilChoice,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/upProfil",
     name: "UpProfil",
     component: ModifProfil,
@@ -65,7 +85,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some((routes) => routes.meta.requiresVisitor)) {
     if ((Data.data.token = localStorage.getItem("acces_token"))) {
       next({
-        name: "Post" || "UpProfil",
+        name: "Post" || "UpProfil" || "ProfilUser" || "Profil",
       });
     } else {
       next();

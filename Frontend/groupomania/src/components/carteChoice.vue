@@ -3,7 +3,7 @@
     class=" d-flex flex-column my-5 align-items-center justify-content-center "
   >
     <div
-      v-for="(poste, id) in postes.slice().reverse()"
+      v-for="(poste, id) in filterPost.slice().reverse()"
       v-bind:key="id"
       class="largeur80 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
     >
@@ -41,14 +41,7 @@
                 {{
                   users
                     .map((user) => {
-                      if (user.id === poste.user_id) return user.prenom;
-                    })
-                    .join("")
-                }}
-                {{
-                  users
-                    .map((user) => {
-                      if (user.id === poste.user_id) return user.nom;
+                      if (user.id === poste.user_id) return user.email;
                     })
                     .join("")
                 }}
@@ -103,19 +96,10 @@
         >
           <img
             v-if="
-              users
-                .map((user) => {
-                  if (user.id === comment.user_id) return user.image_url;
-                })
-                .join('') !== (null || '')
+              comment.user_id === userConnect.id &&
+                (!userConnect.image_url == null || '')
             "
-            :src="
-              users
-                .map((user) => {
-                  if (user.id === comment.user_id) return user.image_url;
-                })
-                .join('')
-            "
+            :src="userConnect.image_url"
             width="60px"
             height="60px"
             class=" mr-3 justify-content-left bordurePost
@@ -138,19 +122,11 @@
           >
             <p class="stopOpac stopPadMarg text-dark">
               {{
-                users
-                  .map((user) => {
-                    if (user.id === comment.user_id) return user.prenom;
-                  })
-                  .join("")
+                users.map((user) => {
+                  if (user.id === comment.user_id) return user.prenom;
+                })
               }}
-              {{
-                users
-                  .map((user) => {
-                    if (user.id === comment.user_id) return user.nom;
-                  })
-                  .join("")
-              }}
+              {{ userConnect.nom }}
             </p>
             <p class="stopOpac text-left stopPadMarg text-secondary">
               {{ comment.comment }}
@@ -176,7 +152,10 @@
             class="d-flex align-items-center justify-content-center align-content-center"
           >
             <img
-              v-if="userConnect.image_url !== null || ''"
+              v-if="
+                poste.user_id === userConnect.id &&
+                  (userConnect.image_url !== null || '')
+              "
               :src="userConnect.image_url"
               width="50px"
               height="50px"
@@ -214,22 +193,18 @@ export default {
     return {
       postes: [],
       users: [],
+      userDef: [],
       userConnect: [],
       comments: [],
       user_id: localStorage.getItem("userId"),
     };
   },
   computed: {
-    /*
     filterUser() {
       return this.users.filter((user) => {
         return user.id;
       });
     },
-       users.map((user) => {
-                    if (user.id === comment.user_id) return user.prenom;
-                  })
-                  .join("")
     filterUserimage() {
       return this.users.filter((user) => {
         return user.image_url;
@@ -240,25 +215,22 @@ export default {
         return user.nom;
       });
     },
-
     filterPost() {
       return this.postes.filter((poste) => {
         return poste.user_id == this.userConnect.id;
       });
     },
-
     filterComm() {
       return this.comments.filter((comment) => {
         return comment.user_id == this.userConnect.id;
       });
     },
-    */
   },
 
   async created() {
     this.postes = [];
     this.users = [];
-
+    this.userDef = [];
     this.userConnect = [];
     //this.postes = [];
     await axios
@@ -272,6 +244,18 @@ export default {
       .get("http://localhost:3000/users")
       .then(
         (response) => ((this.users = response.data), console.log(this.users))
+      )
+      .catch((error) => console.log(error));
+
+    await axios
+      .get("http://localhost:3000/users")
+      .then(
+        (response) => (
+          (this.userDef = response.data.find((user) => {
+            return user.id;
+          })),
+          console.log(this.userDef)
+        )
       )
       .catch((error) => console.log(error));
 
