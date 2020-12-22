@@ -1,20 +1,20 @@
 <template>
   <div>
     <Navigation />
-    <Profil />
+    <Amis />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Navigation from "../components/nav";
-import Profil from "../components/changeProfil";
+import Amis from "../components/amis";
 
 export default {
-  name: "ModifProfil",
+  name: "profil",
   components: {
     Navigation,
-    Profil,
+    Amis,
   },
 };
 </script>

@@ -1,20 +1,19 @@
 <template>
   <div>
     <Navigation />
-    <Profil />
+    <PosterChoice />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Navigation from "../components/nav";
-import Profil from "../components/changeProfil";
-
+import PosterChoice from "../components/posterChoice";
 export default {
-  name: "ModifProfil",
+  name: "ProfilChoice",
   components: {
     Navigation,
-    Profil,
+    PosterChoice,
   },
 };
 </script>

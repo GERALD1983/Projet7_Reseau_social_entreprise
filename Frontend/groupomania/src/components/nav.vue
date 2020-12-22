@@ -48,11 +48,15 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Poster
+            Menu
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Cree un poste</a>
-            <a class="dropdown-item" href="#">Trouver vos postes</a>
+            <router-link class="dropdown-item" to="/profil"
+              >Trouver vos collegues</router-link
+            >
+            <router-link class="dropdown-item" to="/profil/1"
+              >Trouver vos postes</router-link
+            >
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Supprimer tous vos postes</a>
           </div>
@@ -80,30 +84,6 @@
       </form>
     </div>
   </nav>
-
-  <!--
-  <section
-    class=" stopPadMarg bg-primary container-fluid d-sm-flex justify-content-around"
-  >
-    <div class="stopPadMarg">
-      <img
-        src="../assets/image/icon-left-font-monochrome-white.png"
-        class="rounded-circle cube100"
-        alt="logo"
-      />
-    </div>
-
-
-   
-    <div class="text-center cube100">
-      <router-link class="text-white" to="/">S'inscrire</router-link>
-    </div>
-    <div class="text-center cube100">
-     
-      <router-link class="text-white" to="/login">Login</router-link>
-    </div>
-  </section>
-  -->
 </template>
 
 <script>

@@ -3,26 +3,40 @@
     <form @submit.prevent="submit">
       <div class="d-flex align-item-center justify-content-between">
         <img
-          src="../assets/image/photo3.jpg"
-          width="140px"
+          v-if="user.image_url != null"
+          :src="user.image_url"
+          width="120px"
+          height="120px"
           class=" bordureProfil rounded-circle"
           alt="logo"
         />
+        <img
+          v-else
+          src="../assets/image/icon.png"
+          width="120px"
+          height="120px"
+          class="
+        bordureProfil rounded-circle"
+        />
         <div>
-          <button class="mt-3 btn btn-sm btn-outline-danger" type="submit">
-            Supprimer profil <b-icon icon="exclamation-triangle"></b-icon>
+          <button
+            v-if="user_id == user.id"
+            @click="deletePost(user)"
+            class="mt-3 btn btn-sm btn-outline-danger"
+          >
+            Supprimer compte <b-icon icon="exclamation-triangle"></b-icon>
           </button>
         </div>
       </div>
 
-      <div class="form-row">
+      <div class="form-row mt-3">
         <div class="col-md-6 mb-3">
-          <label for="nom">First name</label>
+          <label for="nom">Nom : {{ user.nom }} </label>
           <input
             type="text"
             class="form-control"
             id="nom"
-            v-model.trim="user.nom"
+            v-model.trim="$v.nom.$model"
           />
           <div
             class="error"
@@ -30,35 +44,59 @@
           >
             Field is required
           </div>
+          <div class="error" v-if="!$v.nom.alpha">
+            nom ne doit contenir que des lettres alphabetiques pas d'accent
+          </div>
+          <div class="error" v-if="!$v.nom.maxLength">
+            Max. {{ $v.nom.$params.maxLength.max }} letters.
+          </div>
         </div>
         <div class="col-md-6 mb-3">
-          <label for="validationCustom02">Last name</label>
+          <label for="prenom">Prenom : {{ user.prenom }} </label>
           <input
             type="text"
             class="form-control"
-            id="validationCustom02"
-            value="Otto"
-            required
+            id="prenom"
+            v-model.trim="$v.prenom.$model"
           />
-          <div class="valid-feedback">
-            Looks good!
+          <div
+            class="error"
+            v-if="!$v.prenom.required && submitStatus === 'ERROR'"
+          >
+            Field is required
+          </div>
+          <div class="error" v-if="!$v.prenom.alpha">
+            prenom ne doit contenir que des lettres alphabetiques pas d'accent
+          </div>
+          <div class="error" v-if="!$v.prenom.maxLength">
+            Max. {{ $v.prenom.$params.maxLength.max }} letters.
           </div>
         </div>
       </div>
       <div class="form-row">
         <div class="col-md-6 mb-3">
-          <label for="validationCustom03">City</label>
+          <label for="ville">Ville : {{ user.ville }} </label>
           <input
             type="text"
             class="form-control"
-            id="validationCustom03"
-            required
+            id="ville"
+            v-model.trim="$v.ville.$model"
           />
-          <div class="invalid-feedback">
-            Please provide a valid city.
+          <div
+            class="error"
+            v-if="!$v.ville.required && submitStatus === 'ERROR'"
+          >
+            Field is required
+          </div>
+          <div class="error" v-if="!$v.ville.alpha">
+            prenom ne doit contenir que des lettres alphabetiques pas d'accent
+          </div>
+          <div class="error" v-if="!$v.ville.maxLength">
+            Max. {{ $v.ville.$params.maxLength.max }} letters.
           </div>
         </div>
       </div>
+      <!--
       <div class="form-row d-flex justify-content-center">
         <label>Image de profil</label>
         <div class="custom-file">
@@ -69,8 +107,25 @@
         <div class="invalid-feedback">
           Please select a valid state.
         </div>
+      </div>-->
+      <div class="form-row">
+        <label class="text-center" for="image_url"
+          >Ajouter une image ou multimedia</label
+        >
+        <input
+          class="form-control-file"
+          name="image_url"
+          v-model.trim="$v.image_url.$model"
+        />
       </div>
-
+      <!--
+      <div
+        class="error"
+        v-if="!$v.image_url.required && submitStatus === 'ERROR'"
+      >
+        Field is required
+      </div>
+  -->
       <button
         class="mb-1 mt-5 btn btn-primary backPrimaire"
         type="submit"
@@ -95,7 +150,7 @@
 
 <script>
 import axios from "axios";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, alpha, maxLength } from "vuelidate/lib/validators";
 
 export default {
   name: "formProfil",
@@ -104,19 +159,19 @@ export default {
     return {
       user: [],
 
-      nom: "",
-      prenom: "",
-      ville: "",
-      image_url: "",
+      nom: null,
+      prenom: null,
+      ville: null,
+      image_url: null,
       user_id: localStorage.getItem("userId") || null,
       submitStatus: null,
     };
   },
   validations: {
-    nom: { required, minLength: minLength(8) },
-    prenom: { required },
-    ville: { required },
-    image_url: { required },
+    nom: { required, alpha, maxLength: maxLength(30) },
+    prenom: { required, alpha, maxLength: maxLength(30) },
+    ville: { required, alpha, maxLength: maxLength(30) },
+    image_url: {},
   },
   async created() {
     this.user = [];
@@ -127,6 +182,18 @@ export default {
       .catch((error) => console.log(error));
   },
   methods: {
+    deletePost(user) {
+      axios
+        .delete(`http://localhost:3000/user/${user.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response), localStorage.clear(), this.$router.go("/");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
     submit() {
       console.log("requete ver serveur!");
       this.$v.$touch();
