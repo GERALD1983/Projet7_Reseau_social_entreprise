@@ -2,6 +2,7 @@
   <div class="d-flex justify-content-center">
     <form
       @submit.prevent="submit"
+      enctype="multipart/form-data"
       class="largeur80 my-5 shadow bordurePost bordureRond"
     >
       <div class="form-group">
@@ -37,12 +38,7 @@
         <label class="text-primary" for="image_link"
           >Ajouter une image ou multimedia</label
         >
-        <input
-          type="url"
-          class="form-control-file"
-          name="image_link"
-          v-model.trim="$v.image_link.$model"
-        />
+        <input type="file" ref="image" class="file-input" @change="upload" />
       </div>
       <!--
       <div
@@ -85,8 +81,10 @@ import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   name: "envoyer",
+
   data() {
     return {
+      image: null,
       titre: "",
       description: "",
       image_link: null || "",
@@ -99,8 +97,26 @@ export default {
     description: { required, maxLength: maxLength(500) },
     image_link: {},
   },
+
   methods: {
+    upload() {
+      this.image = this.$refs.image.files[0];
+      console.log(this.image);
+    },
+
     submit() {
+      const formData = new FormData();
+      if (this.image !== null || "") {
+        formData.append("image", this.image, this.image.filename);
+        formData.append("titre", this.titre);
+        formData.append("description", this.description);
+        formData.append("user_id", this.user_id);
+      } else {
+        formData.append("titre", this.titre);
+        formData.append("description", this.description);
+        formData.append("user_id", this.user_id);
+      }
+
       console.log("requete ver serveur!");
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -112,17 +128,19 @@ export default {
         this.submitStatus = "PENDING";
 
         axios
-          .post("http://localhost:3000/poste", {
-            titre: this.titre,
-            description: this.description,
-            image_link: this.image_link,
-            user_id: this.user_id,
-          })
+          .post(
+            "http://localhost:3000/poste",
+            formData
+            //titre: this.titre,
+            // description: this.description,
+            // user_id: this.user_id,
+          )
           .then((response) => {
-            (this.submitStatus = "OK"),
-              console.log(response),
-              this.$router.go("/post");
+            (this.submitStatus = "OK"), console.log(response);
+            console.log(formData);
+            //this.$router.go("/post");
           })
+
           .catch(
             (error) => (
               (this.submitStatus = "ERROR SERVEUR"), console.log(error)

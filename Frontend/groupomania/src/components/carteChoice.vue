@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="postes && postes.some((poste) => poste.user_id == userConnect.id)"
     class=" d-flex flex-column my-5 align-items-center justify-content-center "
   >
     <div
@@ -41,7 +42,14 @@
                 {{
                   users
                     .map((user) => {
-                      if (user.id === poste.user_id) return user.email;
+                      if (user.id === poste.user_id) return user.prenom;
+                    })
+                    .join("")
+                }}
+                {{
+                  users
+                    .map((user) => {
+                      if (user.id === poste.user_id) return user.nom;
                     })
                     .join("")
                 }}
@@ -96,10 +104,19 @@
         >
           <img
             v-if="
-              comment.user_id === userConnect.id &&
-                (!userConnect.image_url == null || '')
+              users
+                .map((user) => {
+                  if (user.id === comment.user_id) return user.image_url;
+                })
+                .join('') !== (null || '')
             "
-            :src="userConnect.image_url"
+            :src="
+              users
+                .map((user) => {
+                  if (user.id === comment.user_id) return user.image_url;
+                })
+                .join('')
+            "
             width="60px"
             height="60px"
             class=" mr-3 justify-content-left bordurePost
@@ -122,20 +139,42 @@
           >
             <p class="stopOpac stopPadMarg text-dark">
               {{
-                users.map((user) => {
-                  if (user.id === comment.user_id) return user.prenom;
-                })
+                users
+                  .map((user) => {
+                    if (user.id === comment.user_id) return user.prenom;
+                  })
+                  .join("")
               }}
-              {{ userConnect.nom }}
+              {{
+                users
+                  .map((user) => {
+                    if (user.id === comment.user_id) return user.nom;
+                  })
+                  .join("")
+              }}
             </p>
             <p class="stopOpac text-left stopPadMarg text-secondary">
               {{ comment.comment }}
             </p>
           </div>
           <b-button
+            v-if="user_id == comment.user_id"
+            @click="deleteComment(comment)"
             size="sm"
             variant="danger"
-            class="d-flex justify-content-center bg-light ml-2 minHeight25 minwidth25"
+            class="d-flex visible justify-content-center bg-light ml-2 minHeight25 minwidth25"
+          >
+            <b-icon
+              icon="trash-fill"
+              variant="danger"
+              aria-label="false"
+            ></b-icon>
+          </b-button>
+          <b-button
+            v-else-if="user_id != comment.user_id"
+            size="sm"
+            variant="danger"
+            class="d-flex invisible justify-content-center bg-light ml-2 minHeight25 minwidth25"
           >
             <b-icon
               icon="trash-fill"
@@ -144,7 +183,7 @@
             ></b-icon>
           </b-button>
         </div>
-        <div class="mt-1 form-group">
+        <form @submit.prevent="submit(poste)" class="mt-1 form-group">
           <label class="text-primary" for="commentaire"
             >Laisser un commentaire</label
           >
@@ -152,10 +191,7 @@
             class="d-flex align-items-center justify-content-center align-content-center"
           >
             <img
-              v-if="
-                poste.user_id === userConnect.id &&
-                  (userConnect.image_url !== null || '')
-              "
+              v-if="userConnect.image_url !== null || ''"
               :src="userConnect.image_url"
               width="50px"
               height="50px"
@@ -176,29 +212,67 @@
               type="text"
               class="form-control"
               name="commentaire"
-              placeholder="Commentaires..."
+              placeholder="Commentaire..."
+              v-model.trim="$v.commentaire.$model"
             />
           </div>
-        </div>
+          <div
+            class="error"
+            v-if="!$v.commentaire.required && submitStatus === 'ERROR'"
+          >
+            Field is required
+          </div>
+          <div class="error" v-if="!$v.commentaire.maxLength">
+            Max. {{ $v.commentaire.$params.maxLength.max }} letters.
+          </div>
+          <div class="d-flex justify-content-end">
+            <input
+              class=" bordureRond bodurePost border border-primary backPrimaire"
+              type="submit"
+              value="envoyer"
+            />
+          </div>
+          <p class="typo__p" v-if="submitStatus === 'OK'">
+            Thanks for your submission!
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'ERROR'">
+            Please fill the form correctly.
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'ERROR SERVEUR'">
+            erreur serveur! ou commentaire n'a pas un bon format ou server HS !
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
+        </form>
       </div>
     </div>
+  </div>
+  <div v-else class="my-4">
+    <h1>Pas de poste actuellement</h1>
   </div>
 </template>
 
 <script>
+import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   name: "carte",
   data() {
     return {
+      commentaire: "",
       postes: [],
       users: [],
       userDef: [],
       userConnect: [],
       comments: [],
       user_id: localStorage.getItem("userId"),
+      userChoice: localStorage.getItem("userChoice"),
+      submitStatus: null,
     };
   },
+  validations: {
+    commentaire: { required, maxLength: maxLength(200) },
+  },
+
   computed: {
     filterUser() {
       return this.users.filter((user) => {
@@ -220,6 +294,7 @@ export default {
         return poste.user_id == this.userConnect.id;
       });
     },
+
     filterComm() {
       return this.comments.filter((comment) => {
         return comment.user_id == this.userConnect.id;
@@ -260,7 +335,7 @@ export default {
       .catch((error) => console.log(error));
 
     await axios
-      .get(`http://localhost:3000/user/${this.user_id}`)
+      .get(`http://localhost:3000/user/${this.userChoice}`)
       .then(
         (response) => (
           (this.userConnect = response.data), console.log(this.userConnect.id)
@@ -279,12 +354,58 @@ export default {
   },
 
   methods: {
+    async submit(poste) {
+      console.log("requete ver serveur!");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+        console.log("A echouer informations non complete!");
+      } else {
+        // do your submit logic here
+        console.log("En attente");
+        this.submitStatus = "PENDING";
+
+        await axios
+          .post("http://localhost:3000/commentaire", {
+            comment: this.commentaire,
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            (this.submitStatus = "OK"), console.log(response);
+            localStorage.setItem("userChoice", this.user_id);
+            this.$router.go(`/post`);
+          })
+          .catch(
+            (error) => (
+              (this.submitStatus = "ERROR SERVEUR"), console.log(error)
+            )
+          );
+      }
+    },
     deletePost(poste) {
       axios
         .delete(`http://localhost:3000/poste/${poste.id}`, {})
         .then((response) => {
           //(this.submitStatus = "OK"),
-          console.log(response), this.$router.go("/post");
+
+          console.log(response),
+            localStorage.setItem("userChoice", this.user_id);
+          this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async deleteComment(comment) {
+      await axios
+        .delete(`http://localhost:3000/commentaire/${comment.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response),
+            localStorage.setItem("userChoice", this.user_id);
+          this.$router.go("/post");
         })
         .catch((error) =>
           // (this.submitStatus = "ERROR SERVEUR"),

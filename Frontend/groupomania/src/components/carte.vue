@@ -157,9 +157,23 @@
             </p>
           </div>
           <b-button
+            v-if="user_id == comment.user_id"
+            @click="deleteComment(comment)"
             size="sm"
             variant="danger"
-            class="d-flex justify-content-center bg-light ml-2 minHeight25 minwidth25"
+            class="d-flex visible justify-content-center bg-light ml-2 minHeight25 minwidth25"
+          >
+            <b-icon
+              icon="trash-fill"
+              variant="danger"
+              aria-label="false"
+            ></b-icon>
+          </b-button>
+          <b-button
+            v-else-if="user_id != comment.user_id"
+            size="sm"
+            variant="danger"
+            class="d-flex invisible justify-content-center bg-light ml-2 minHeight25 minwidth25"
           >
             <b-icon
               icon="trash-fill"
@@ -168,7 +182,7 @@
             ></b-icon>
           </b-button>
         </div>
-        <div class="mt-1 form-group">
+        <form @submit.prevent="submit(poste)" class="mt-1 form-group">
           <label class="text-primary" for="commentaire"
             >Laisser un commentaire</label
           >
@@ -197,63 +211,62 @@
               type="text"
               class="form-control"
               name="commentaire"
-              placeholder="Commentaires..."
+              placeholder="Commentaire..."
+              v-model.trim="$v.commentaire.$model"
             />
           </div>
-        </div>
+          <div
+            class="error"
+            v-if="!$v.commentaire.required && submitStatus === 'ERROR'"
+          >
+            Field is required
+          </div>
+          <div class="error" v-if="!$v.commentaire.maxLength">
+            Max. {{ $v.commentaire.$params.maxLength.max }} letters.
+          </div>
+          <div class="d-flex justify-content-end">
+            <input
+              class=" bordureRond bodurePost border border-primary backPrimaire"
+              type="submit"
+              value="envoyer"
+            />
+          </div>
+          <p class="typo__p" v-if="submitStatus === 'OK'">
+            Thanks for your submission!
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'ERROR'">
+            Please fill the form correctly.
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'ERROR SERVEUR'">
+            erreur serveur! ou commentaire n'a pas un bon format ou server HS !
+          </p>
+          <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { required, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 export default {
   name: "carte",
   data() {
     return {
+      commentaire: "",
       postes: [],
       users: [],
       userConnect: [],
       comments: [],
       user_id: localStorage.getItem("userId"),
+      submitStatus: null,
     };
   },
-  computed: {
-    /*
-    filterUser() {
-      return this.users.filter((user) => {
-        return user.id;
-      });
-    },
-       users.map((user) => {
-                    if (user.id === comment.user_id) return user.prenom;
-                  })
-                  .join("")
-    filterUserimage() {
-      return this.users.filter((user) => {
-        return user.image_url;
-      });
-    },
-    filterUsernom() {
-      return this.users.filter((user) => {
-        return user.nom;
-      });
-    },
-
-    filterPost() {
-      return this.postes.filter((poste) => {
-        return poste.user_id == this.userConnect.id;
-      });
-    },
-
-    filterComm() {
-      return this.comments.filter((comment) => {
-        return comment.user_id == this.userConnect.id;
-      });
-    },
-    */
+  validations: {
+    commentaire: { required, maxLength: maxLength(200) },
   },
+  computed: {},
 
   async created() {
     this.postes = [];
@@ -295,9 +308,49 @@ export default {
   },
 
   methods: {
-    deletePost(poste) {
-      axios
+    async submit(poste) {
+      console.log("requete ver serveur!");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+        console.log("A echouer informations non complete!");
+      } else {
+        // do your submit logic here
+        console.log("En attente");
+        this.submitStatus = "PENDING";
+
+        await axios
+          .post("http://localhost:3000/commentaire", {
+            comment: this.commentaire,
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            (this.submitStatus = "OK"), console.log(response);
+            this.$router.go("/post");
+          })
+          .catch(
+            (error) => (
+              (this.submitStatus = "ERROR SERVEUR"), console.log(error)
+            )
+          );
+      }
+    },
+    async deletePost(poste) {
+      await axios
         .delete(`http://localhost:3000/poste/${poste.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response), this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async deleteComment(comment) {
+      await axios
+        .delete(`http://localhost:3000/commentaire/${comment.id}`, {})
         .then((response) => {
           //(this.submitStatus = "OK"),
           console.log(response), this.$router.go("/post");

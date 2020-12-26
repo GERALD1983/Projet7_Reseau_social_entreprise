@@ -45,20 +45,22 @@
             v-bind:key="id"
             class="col-md-3 d-flex flex-column align-items-center align-content-center"
           >
-            <img
-              v-if="user.image_url !== null || ''"
-              :src="user.image_url"
-              width="100px"
-              height="100px"
-              class=" justify-content-left bordureProfil
+            <div @click="changeUser(user)" class="cursor">
+              <img
+                v-if="user.image_url !== null || ''"
+                :src="user.image_url"
+                width="100px"
+                height="100px"
+                class=" justify-content-left bordureProfil
           rounded-circle"
-            />
-            <img
-              v-else
-              src="../assets/image/icon.png"
-              width="100px"
-              class=" justify-content-left bordureProfil rounded-circle"
-            />
+              />
+              <img
+                v-else
+                src="../assets/image/icon.png"
+                width="100px"
+                class=" justify-content-left bordureProfil rounded-circle"
+              />
+            </div>
             <div>
               <h5 class="mt-2">
                 {{ user.nom.toUpperCase() }}
@@ -89,18 +91,14 @@ export default {
       searchKey: "",
       postes: [],
       users: [],
-      userDef: [],
-      userConnect: [],
-      comments: [],
       user_id: localStorage.getItem("userId"),
+      userChoice: localStorage.getItem("userChoice"),
     };
   },
   async created() {
     this.postes = [];
     this.users = [];
-    this.userDef = [];
-    this.userConnect = [];
-    //this.postes = [];
+
     await axios
       .get("http://localhost:3000/postes")
       .then(
@@ -151,6 +149,13 @@ export default {
       return this.users.filter((user) => {
         return user.nom.toLowerCase().includes(this.searchKey.toLowerCase());
       });
+    },
+  },
+  methods: {
+    async changeUser(user) {
+      await localStorage.removeItem("userChoice");
+      localStorage.setItem("userChoice", user.id);
+      this.$router.push(`/profil/${this.userChoice}`);
     },
   },
 };

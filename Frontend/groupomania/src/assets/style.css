@@ -73,3 +73,6 @@
 .backPrimaire {
   background-color: rgb(253, 236, 236);
 }
+.cursor {
+  cursor: pointer;
+}

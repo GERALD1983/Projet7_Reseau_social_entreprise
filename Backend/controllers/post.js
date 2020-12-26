@@ -1,5 +1,59 @@
 const mysql = require("mysql");
 const Poste = require("../models/post");
+const fs = require("fs");
+//const fileUpload = require("express-fileupload");
+
+const db = require("knex")({
+  client: "mysql",
+  connection: {
+    host: "localhost",
+    user: "gerald",
+    password: "gerald",
+    database: "groupomania",
+  },
+});
+/*
+exports.create = async (req, res) => {
+  const postObject = JSON.parse(req.body);
+  try {
+    if (!req.body) {
+      res.status(400).send({
+        message: "Content can not be empty!",
+      });
+    }
+    // const hash = await bcrypt.hash(req.body.mdp, 10);
+    const poste = {
+      ...postObject,
+     
+      titre: req.body.titre,
+      description: req.body.description,
+      image_link: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`,
+     
+      nb_commentaires: req.body.nb_commentaires,
+      nb_likes: req.body.nb_likes,
+      nb_dislikes: req.body.nb_dislikes,
+      user_id: req.body.user_id,
+      date_cree: new Date(),
+    };
+
+    await db("poster").insert({
+      poste,
+    });
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+
+    // Use the mv() method to place the file somewhere on your server
+
+    res.status(200).json("all good");
+  } catch (error) {
+    if (error.errno === 19) {
+      res.status(400).json("Some error occurred while creating the Poste.");
+    } else console.log(error);
+    res.status(500).send("something broke");
+  }
+};
+*/
 
 // Create and Save a new Poste
 exports.create = (req, res) => {
@@ -14,12 +68,14 @@ exports.create = (req, res) => {
   const poste = new Poste({
     titre: req.body.titre,
     description: req.body.description,
-    image_link: req.body.image_link,
+    image_link: req.file
+      ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+      : "",
     nb_commentaires: req.body.nb_commentaires,
     nb_likes: req.body.nb_likes,
     nb_dislikes: req.body.nb_dislikes,
     user_id: req.body.user_id,
-    date_cree: req.body.date_cree,
+    date_cree: new Date(),
   });
 
   // Save Poste in the database
@@ -86,7 +142,8 @@ exports.update = (req, res) => {
 
 // Delete a Poste with the specified posteId in the request
 exports.delete = (req, res) => {
-  Poste.remove(req.params.posteId, (err, data) => {
+  Poste.findById(req.params.posteId, (err, poste, data) => {
+    const filename = poste.image_link.split("/images/")[1];
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -94,10 +151,16 @@ exports.delete = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Poste with id " + req.params.posteId,
+          message: "Error retrieving Poste with id " + req.params.posteId,
         });
       }
-    } else res.send({ message: `Poste was deleted successfully!` });
+    } else {
+      fs.unlink(`images/${filename}`, () => {
+        Poste.remove(req.params.posteId, (err, data) => {
+          res.send({ message: `Poste was deleted successfully!` });
+        });
+      });
+    }
   });
 };
 

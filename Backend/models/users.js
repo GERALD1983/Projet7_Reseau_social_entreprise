@@ -10,24 +10,6 @@ const User = function (user) {
   this.image_url = user.image_url;
   this.ville = user.ville;
 };
-/*
-User.create = (newUser, result) => {
-  connection.query(
-    "INSERT INTO User SET ?, date_cree = NOW()",
-    newUser,
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      console.log("created user: ", { id: res.insertId, ...newUser });
-      result(null, { id: res.insertId, ...newUser });
-    }
-  );
-};
-*/
 
 User.findById = (userId, result) => {
   connection.query(`SELECT * FROM User WHERE id = ${userId}`, (err, res) => {

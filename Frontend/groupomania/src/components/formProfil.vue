@@ -1,9 +1,9 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
+    <form @submit.prevent="submit" enctype="multipart/form-data">
       <div class="d-flex align-item-center justify-content-between">
         <img
-          v-if="user.image_url != null"
+          v-if="user.image_url !== null"
           :src="user.image_url"
           width="120px"
           height="120px"
@@ -96,27 +96,12 @@
           </div>
         </div>
       </div>
-      <!--
-      <div class="form-row d-flex justify-content-center">
-        <label>Image de profil</label>
-        <div class="custom-file">
-          <input type="file" class="custom-file-input " id="customFile " />
-          <label class="custom-file-label" for="customFile">Choose file</label>
-        </div>
 
-        <div class="invalid-feedback">
-          Please select a valid state.
-        </div>
-      </div>-->
-      <div class="form-row">
-        <label class="text-center" for="image_url"
+      <div class="form-group">
+        <label class="text-center" for="image"
           >Ajouter une image ou multimedia</label
         >
-        <input
-          class="form-control-file"
-          name="image_url"
-          v-model.trim="$v.image_url.$model"
-        />
+        <input type="file" ref="image" class="file-input" @change="upload" />
       </div>
       <!--
       <div
@@ -157,11 +142,11 @@ export default {
 
   data() {
     return {
+      image: null,
       user: [],
-
-      nom: null,
-      prenom: null,
-      ville: null,
+      nom: "",
+      prenom: "",
+      ville: "",
       image_url: null,
       user_id: localStorage.getItem("userId") || null,
       submitStatus: null,
@@ -173,15 +158,11 @@ export default {
     ville: { required, alpha, maxLength: maxLength(30) },
     image_url: {},
   },
-  async created() {
-    this.user = [];
-    //this.postes = [];
-    await axios
-      .get(`http://localhost:3000/user/${this.user_id}`)
-      .then((response) => ((this.user = response.data), console.log(response)))
-      .catch((error) => console.log(error));
-  },
   methods: {
+    upload() {
+      this.image = this.$refs.image.files[0];
+      console.log(this.image);
+    },
     deletePost(user) {
       axios
         .delete(`http://localhost:3000/user/${user.id}`, {})
@@ -195,6 +176,18 @@ export default {
         );
     },
     submit() {
+      const formData = new FormData();
+      if (this.image !== null || "") {
+        formData.append("image", this.image, this.image.filename);
+        formData.append("nom", this.nom);
+        formData.append("prenom", this.prenom);
+        formData.append("ville", this.ville);
+      } else {
+        formData.append("nom", this.nom);
+        formData.append("prenom", this.prenom);
+        formData.append("ville", this.ville);
+      }
+
       console.log("requete ver serveur!");
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -206,16 +199,11 @@ export default {
         this.submitStatus = "PENDING";
 
         axios
-          .put(`http://localhost:3000/user/${this.user_id}`, {
-            nom: this.nom,
-            prenom: this.prenom,
-            ville: this.ville,
-            image_url: this.image_url,
-          })
+          .put(`http://localhost:3000/user/${this.user_id}`, formData)
           .then((response) => {
-            (this.submitStatus = "OK"),
-              console.log(response),
-              this.$router.push("/post");
+            (this.submitStatus = "OK"), console.log(response);
+            console.log(formData);
+            //this.$router.push("/post");
           })
           .catch(
             (error) => (
@@ -224,6 +212,14 @@ export default {
           );
       }
     },
+  },
+  async created() {
+    this.user = [];
+    //this.postes = [];
+    await axios
+      .get(`http://localhost:3000/user/${this.user_id}`)
+      .then((response) => ((this.user = response.data), console.log(response)))
+      .catch((error) => console.log(error));
   },
 };
 </script>

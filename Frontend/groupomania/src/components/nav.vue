@@ -1,6 +1,7 @@
 <template>
   <nav class="stopPadMarg navbar navbar-expand-md navbar-light backPrimaire">
     <a
+      @click="acceuil"
       class="pl-1 navbar-brand text-secondary"
       href="http://localhost:8080/post"
       ><img
@@ -51,37 +52,31 @@
             Menu
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" to="/profil"
-              >Trouver vos collegues</router-link
-            >
-            <router-link class="dropdown-item" to="/profil/1"
-              >Trouver vos postes</router-link
-            >
+            <li @click="supprimChoice">
+              <router-link class="dropdown-item" to="/profil"
+                >Trouver vos collegues</router-link
+              >
+            </li>
+            <li @click="myPoste">
+              <router-link class="dropdown-item" :to="`/profil/${userChoice}`"
+                >Trouver vos postes</router-link
+              >
+            </li>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Supprimer tous vos postes</a>
           </div>
         </li>
-        <li class="ml-3 nav-item">
-          <router-link class="text-primary nav-link" to="/upProfil">
-            <b-icon-person-circle class="pr-1"></b-icon-person-circle>Mon
-            Profil</router-link
-          >
-        </li>
       </ul>
-      <form class="justify-content-center form-inline py-3 my-2 my-lg-0">
-        <input
-          class="form-control mr-sm-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button
-          class="bg-light btn btn-outline-primary mr-3 py-1 my-2 my-sm-0"
-          type="submit"
-        >
-          Search
-        </button>
-      </form>
+      <div class="d-flex justify-content-end">
+        <ul class="navbar-nav mr-3">
+          <li class="ml-3 nav-item">
+            <router-link class="text-primary nav-link" to="/upProfil">
+              <b-icon-person-circle class="pr-1"></b-icon-person-circle>Mon
+              Compte</router-link
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 </template>
@@ -91,13 +86,30 @@ export default {
   data() {
     return {
       token: localStorage.getItem("acces_token"),
+      user_id: localStorage.getItem("userId"),
+      userChoice: localStorage.getItem("userChoice"),
     };
   },
   methods: {
     deconnecte() {
       localStorage.removeItem("acces_token");
       localStorage.removeItem("userId");
+      localStorage.removeItem("userChoice");
       this.$router.push("/login");
+    },
+    supprimChoice() {
+      localStorage.removeItem("userChoice");
+    },
+    acceuil() {
+      localStorage.setItem("userChoice", this.user_id);
+      //const userChoice = localStorage.getItem("userChoice");
+    },
+    myPoste() {
+      localStorage.setItem("userChoice", this.user_id);
+      const userChoice = localStorage.getItem("userChoice");
+      const path = `/profil/${userChoice}`;
+      if (this.$route.path !== path) this.$router.push(path);
+      //this.$router.push(`/profil/${userChoice}`);
     },
   },
 };
