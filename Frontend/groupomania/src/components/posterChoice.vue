@@ -11,7 +11,7 @@
       />
     </div>
     <div class="largeur80">
-      <Envoyer />
+      <Description />
       <div>
         <h3
           class="backPrimaire opacity mx-1 text-primary bordurePost bordureRond"
@@ -45,15 +45,29 @@
 <script>
 //import axios from "axios";
 import CarteChoice from "./carteChoice";
-import Envoyer from "./envoyer";
+import Description from "./description";
 export default {
   components: {
-    Envoyer,
+    Description,
     CarteChoice,
   },
   data() {
     return {};
   },
+  /*
+  async created() {
+    await axios
+      .get(`http://localhost:3000/postes/${poste.id}`, {})
+      .then((response) => {
+        //(this.submitStatus = "OK"),
+        console.log(response), this.$router.go("/post");
+      })
+      .catch((error) =>
+        // (this.submitStatus = "ERROR SERVEUR"),
+        console.log(error)
+      );
+  },
+  */
 };
 </script>
 

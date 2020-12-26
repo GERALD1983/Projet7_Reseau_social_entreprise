@@ -171,6 +171,7 @@ export default {
 
             localStorage.setItem("acces_token", token),
               localStorage.setItem("userId", userId),
+              localStorage.setItem("userChoice", userId),
               (this.submitStatus = "OK"),
               console.log(response),
               this.$router.go("/post");

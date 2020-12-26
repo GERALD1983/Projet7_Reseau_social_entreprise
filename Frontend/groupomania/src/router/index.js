@@ -10,7 +10,7 @@ import ProfilChoice from "../views/ProfilChoice.vue";
 
 Vue.use(VueRouter);
 
-//const userProfil = localStorage.getItem("userProfil");
+const userChoice = localStorage.getItem("userChoice");
 
 const routes = [
   {
@@ -51,7 +51,7 @@ const routes = [
     },
   },
   {
-    path: `/profil/1`, //${userProfil}
+    path: `/profil/${userChoice}`, //${userProfil}
     name: "ProfilUser",
     component: ProfilChoice,
     meta: {

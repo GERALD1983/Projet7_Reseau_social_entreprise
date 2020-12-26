@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
+const multer = require("../middleware/multer-config");
 
 // creation des routes de post des utilisateurs modif get et supprimer post
 
 const postes = require("../controllers/post");
 
 // Create a new Poste
-router.post("/poste", auth, postes.create);
+router.post("/poste", auth, multer, postes.create);
 
 // Retrieve all Postes
 router.get("/postes", auth, postes.findAll);
