@@ -35,9 +35,12 @@
         Field is required
       </div>
       <div class="form-group">
-        <label class="text-primary" for="image_link"
-          >Ajouter une image ou multimedia</label
-        >
+        <label class="mb-3 text-primary" for="image_link"
+          >Ajouter une image: Jpg Jpeg ou Png ou multimedia: Mp4 accepter
+          <br />
+          Ps: Eviter les videos longues sinon sending Wait long !!
+        </label>
+        <br />
         <input type="file" ref="image" class="file-input" @change="upload" />
       </div>
       <!--
@@ -138,7 +141,7 @@ export default {
           .then((response) => {
             (this.submitStatus = "OK"), console.log(response);
             console.log(formData);
-            //this.$router.go("/post");
+            this.$router.go("/post");
           })
 
           .catch(
