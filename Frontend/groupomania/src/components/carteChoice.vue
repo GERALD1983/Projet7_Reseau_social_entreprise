@@ -6,7 +6,7 @@
     <div
       v-for="(poste, id) in filterPost.slice().reverse()"
       v-bind:key="id"
-      class="largeur80 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
+      class="largeur70 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
     >
       <div class="card-body p-3 container-fluid">
         <div class="d-flex justify-content-between">
@@ -61,7 +61,7 @@
                     .join("")
                 }}
               </h5>
-              <h6>Publié le: {{ poste.date_cree }}</h6>
+              <h6>Publié le: {{ poste.jolie_date }}</h6>
             </div>
           </div>
           <b-button
@@ -82,12 +82,30 @@
         <h4 class=" largeur100 card-title">{{ poste.titre }}</h4>
         <div class=" my-3">
           <img
-            v-if="poste.image_link !== '' && poste.image_link !== null"
+            v-if="
+              poste.image_link !== '' &&
+                poste.image_link !== null &&
+                (poste.image_link.split('.')[2] === 'png' || 'jpg') &&
+                poste.image_link.split('.')[2] !== 'mp4'
+            "
             class="card-img-top"
             height="400px"
             :src="poste.image_link"
             alt="img-or-video"
           />
+
+          <b-container
+            v-if="
+              poste.image_link !== '' &&
+                poste.image_link !== null &&
+                poste.image_link.split('.')[2] === 'mp4'
+            "
+            class="card-img-top stopPadMarg"
+          >
+            <b-embed type="video" aspect="4by3" controls poster="">
+              <source :src="poste.image_link" type="video/mp4" />
+            </b-embed>
+          </b-container>
         </div>
         <div>
           <div class="text-left  text-wrap py-3 card-text">

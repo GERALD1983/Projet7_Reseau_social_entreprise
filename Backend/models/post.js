@@ -49,16 +49,19 @@ Poste.findById = (posteId, result) => {
 };
 
 Poste.getAll = (result) => {
-  connection.query("SELECT * FROM Poster", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+  connection.query(
+    "SELECT id , titre, description, image_link, user_id, date_cree, CONCAT_WS(' ', DAY(date_cree),'/',MONTH(date_cree),'/', YEAR(date_cree) , ' à: ', TIME(date_cree)) AS jolie_date FROM Poster",
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
-    console.log("postes: ", res);
-    result(null, res);
-  });
+      console.log("postes: ", res);
+      result(null, res);
+    }
+  );
 };
 
 Poste.updateById = (id, poste, result) => {
