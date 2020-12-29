@@ -114,7 +114,62 @@
             {{ poste.description }}
           </div>
         </div>
+        <!-- likes -->
 
+        <div class="mb-3 d-flex bordurePost">
+          <!--likes-->
+          <div
+            class="d-flex justify-content-center align-items-center largeur50 "
+          >
+            <b-button
+              @click="addLike(poste)"
+              size="md"
+              variant="outline-primary"
+              class="my-2 minHeight30"
+            >
+              <b-icon
+                class="mb-1"
+                icon="hand-thumbs-up"
+                variant=""
+                aria-label="true"
+              ></b-icon>
+            </b-button>
+            <div class="ml-3">
+              {{
+                likes.filter((like) => {
+                  return like.post_id == poste.id;
+                }).length
+              }}
+            </div>
+          </div>
+          <!--unlikes-->
+          <div
+            class="d-flex justify-content-center align-items-center largeur50 "
+          >
+            <b-button
+              @click="addUnlike(poste)"
+              size="md"
+              variant="outline-primary"
+              class=" my-2 minHeight30"
+            >
+              <b-icon
+                class="mb-1"
+                icon="hand-thumbs-down"
+                variant=""
+                aria-label="false"
+              ></b-icon>
+            </b-button>
+            <div class="ml-3">
+              {{
+                unlikes.filter((unlike) => {
+                  return unlike.post_id == poste.id;
+                }).length
+              }}
+            </div>
+          </div>
+        </div>
+
+        <!-- fin likes -->
         <div
           v-for="(comment, id) in comments.filter((comment) => {
             return comment.post_id == poste.id;
@@ -280,6 +335,8 @@ export default {
       users: [],
       userConnect: [],
       comments: [],
+      likes: [],
+      unlikes: [],
       user_id: localStorage.getItem("userId"),
       submitStatus: null,
     };
@@ -323,6 +380,22 @@ export default {
       .then(
         (response) => (
           (this.comments = response.data), console.log(this.comments)
+        )
+      )
+      .catch((error) => console.log(error));
+
+    await axios
+      .get("http://localhost:3000/likes")
+      .then(
+        (response) => ((this.likes = response.data), console.log(this.likes))
+      )
+      .catch((error) => console.log(error));
+
+    await axios
+      .get("http://localhost:3000/unlikes")
+      .then(
+        (response) => (
+          (this.unlikes = response.data), console.log(this.unlikes)
         )
       )
       .catch((error) => console.log(error));
@@ -375,6 +448,64 @@ export default {
         .then((response) => {
           //(this.submitStatus = "OK"),
           console.log(response), this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async addLike(poste) {
+      await axios
+        .post(`http://localhost:3000/likes`, {
+          post_id: poste.id,
+          user_id: this.user_id,
+        })
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response);
+          this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async addUnlike(poste) {
+      await axios
+        .post(`http://localhost:3000/unlikes`, {
+          post_id: poste.id,
+          user_id: this.user_id,
+        })
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response);
+          this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async deleteLike(like) {
+      await axios
+        .delete(`http://localhost:3000/like/${like.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response);
+          // this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
+    async deleteUnlike(unlike) {
+      await axios
+        .delete(`http://localhost:3000/unlike/${unlike.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response);
+          // this.$router.go("/post");
         })
         .catch((error) =>
           // (this.submitStatus = "ERROR SERVEUR"),

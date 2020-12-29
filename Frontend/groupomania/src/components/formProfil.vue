@@ -203,7 +203,7 @@ export default {
           .then((response) => {
             (this.submitStatus = "OK"), console.log(response);
             console.log(formData);
-            //this.$router.push("/post");
+            this.$router.push("/post");
           })
           .catch(
             (error) => (
