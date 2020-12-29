@@ -8,6 +8,7 @@ const loginRoutes = require("./routes/login");
 const userRoutes = require("./routes/users");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
+const likeRoutes = require("./routes/like");
 
 const app = express();
 console.log("salut");
@@ -33,5 +34,6 @@ app.use(loginRoutes);
 app.use(userRoutes);
 app.use(postRoutes);
 app.use(commentRoutes);
+app.use(likeRoutes);
 
 module.exports = app;
