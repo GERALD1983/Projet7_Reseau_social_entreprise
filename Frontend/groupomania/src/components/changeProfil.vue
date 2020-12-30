@@ -1,6 +1,6 @@
 <template>
   <section
-    class="hauteur stopPadMarg container-fluid d-md-flex justify-content-between"
+    class="hauteur100 stopPadMarg container-fluid d-md-flex justify-content-between"
   >
     <div class="py-5 stopPadMarg  bg-primary col-md-1">
       <img
@@ -10,9 +10,14 @@
         alt="logo"
       />
     </div>
-    <div class="d-flex align-items-center justify-content-center col-md-7">
+    <div
+      class="d-flex flex-column align-items-center justify-content-center col-md-7"
+    >
+      <div class="container" v-if="user_id == 59">
+        <Admin />
+      </div>
       <div
-        class="container d-flex justify-content-center  my-3 hauteur85 card  bordureProfil border-primary bordureRond shadow"
+        class="container d-flex justify-content-center hauteur400 my-5 card bordureProfil border-primary bordureRond shadow"
       >
         <FormProfil />
       </div>
@@ -28,10 +33,17 @@
   </section>
 </template>
 <script>
+import Admin from "./admin";
 import FormProfil from "./formProfil";
 export default {
   components: {
     FormProfil,
+    Admin,
+  },
+  data() {
+    return {
+      user_id: localStorage.getItem("userId"),
+    };
   },
 };
 </script>

@@ -16,6 +16,9 @@
 .hauteur100 {
   height: 100%;
 }
+.hauteur400 {
+  height: 600px;
+}
 .minwidth25 {
   width: 25px;
 }
