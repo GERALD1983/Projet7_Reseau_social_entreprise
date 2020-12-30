@@ -1,6 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cookieSession = require("cookie-session");
+const helmet = require("helmet");
+
+// module npm  independance qui charge les variables d environnement
+require("dotenv").config();
+
+// desactive le cache
+const nocache = require("nocache");
 
 //const connection = require("./ConnexionBDD/connect");
 
@@ -12,6 +20,9 @@ const likeRoutes = require("./routes/like");
 
 const app = express();
 console.log("salut");
+
+// methode securite helmet
+app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -25,6 +36,21 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(
+  cookieSession({
+    name: "session",
+    secret: "s3CuR3T3",
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      domain: "http://localhost:3000/",
+    },
+  })
+);
+
+// appel de fonction desactive cache
+app.use(nocache());
 
 app.use(bodyParser.json());
 

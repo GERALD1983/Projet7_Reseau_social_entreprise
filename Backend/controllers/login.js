@@ -2,13 +2,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const mysql = require("mysql");
+const maskData = require("maskdata");
+
+const emailMaskOptions = {
+  maskWith: "*",
+  unmaskedStartCharactersBeforeAt: 2,
+  unmaskedEndCharactersAfterAt: 1,
+  maskAtTheRate: false,
+};
 
 const db = require("knex")({
   client: "mysql",
   connection: {
     host: "localhost",
-    user: "gerald",
-    password: "gerald",
+    user: process.env.USER,
+    password: process.env.PASSWORD,
     database: "groupomania",
   },
 });
@@ -24,7 +32,7 @@ exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(req.body.mdp, 10);
 
     await db("user").insert({
-      email: req.body.email,
+      email: maskData.maskEmail2(req.body.email, emailMaskOptions),
       mdp: hash,
       nom: req.body.nom,
       prenom: req.body.prenom,
@@ -44,7 +52,8 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, mdp } = req.body;
+    const email = maskData.maskEmail2(req.body.email, emailMaskOptions);
+    const mdp = req.body.mdp;
 
     if (!email || !mdp) {
       res.status(400).json(`Missing ${!email ? "email" : "mdp"}!`);
@@ -55,7 +64,7 @@ exports.login = async (req, res) => {
     if (user) {
       const validPass = await bcrypt.compare(mdp, user.mdp);
       if (validPass) {
-        const token = jwt.sign({ userId: user.id }, "RANDOM_TOKEN_SECRET", {
+        const token = jwt.sign({ userId: user.id }, process.env.TOKENSECRET, {
           expiresIn: "24h",
         });
         res.status(200).json({ userId: user.id, token: token });

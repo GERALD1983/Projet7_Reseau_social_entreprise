@@ -13,7 +13,7 @@
     <div
       class="d-flex flex-column align-items-center justify-content-center col-md-7"
     >
-      <div class="container" v-if="user_id == 59">
+      <div class="container" v-if="user_id == 61">
         <Admin />
       </div>
       <div

@@ -12,7 +12,7 @@ router.post("/unlikes", auth, likers.createUnlike);
 // Delete a Like with likeId
 router.delete("/like/:likeId", auth, likers.deleteLike);
 // Delete a UnLike with unlikeId
-router.delete("/unlike/:likeId", auth, likers.deleteUnlike);
+router.delete("/unlike/:unlikeId", auth, likers.deleteUnlike);
 
 // Retrieve all Likes
 router.get("/likes", auth, likers.findAllLikes);
