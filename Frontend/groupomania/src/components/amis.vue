@@ -93,6 +93,11 @@ export default {
       users: [],
       user_id: localStorage.getItem("userId"),
       userChoice: localStorage.getItem("userChoice"),
+      watch: {
+        "$route.params.user_id"() {
+          this.reloadAllStuff();
+        },
+      },
     };
   },
   async created() {
@@ -154,8 +159,10 @@ export default {
   methods: {
     async changeUser(user) {
       await localStorage.removeItem("userChoice");
-      localStorage.setItem("userChoice", user.id);
-      this.$router.push(`/profil/${this.userChoice}`);
+      await localStorage.setItem("userChoice", user.id);
+      //this.$route.params.user_id;
+
+      await this.$router.push(`/profil/${user.id}`);
     },
   },
 };

@@ -65,7 +65,7 @@
             </div>
           </div>
           <b-button
-            v-if="user_id == poste.user_id"
+            v-if="user_id == poste.user_id || user_id == 59"
             @click="deletePost(poste)"
             size="sm"
             variant="danger"
@@ -176,7 +176,7 @@
             </p>
           </div>
           <b-button
-            v-if="user_id == comment.user_id"
+            v-if="user_id == comment.user_id || user_id == 59"
             @click="deleteComment(comment)"
             size="sm"
             variant="danger"

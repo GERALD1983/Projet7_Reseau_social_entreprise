@@ -88,7 +88,15 @@ export default {
       token: localStorage.getItem("acces_token"),
       user_id: localStorage.getItem("userId"),
       userChoice: localStorage.getItem("userChoice"),
+      watch: {
+        "$route.params.user_id"() {
+          this.reloadAllStuff();
+        },
+      },
     };
+  },
+  created() {
+    this.userChoice = this.$route.params.user_id;
   },
   methods: {
     deconnecte() {
@@ -104,12 +112,14 @@ export default {
       localStorage.setItem("userChoice", this.user_id);
       //const userChoice = localStorage.getItem("userChoice");
     },
-    myPoste() {
-      localStorage.setItem("userChoice", this.user_id);
-      const userChoice = localStorage.getItem("userChoice");
-      const path = `/profil/${userChoice}`;
-      if (this.$route.path !== path) this.$router.push(path);
-      //this.$router.push(`/profil/${userChoice}`);
+    async myPoste() {
+      await localStorage.setItem("userChoice", this.user_id);
+      const user = localStorage.getItem("userId");
+
+      //const path = `/profil/${this.user_id}`;
+      //if (this.$route.path !== path) this.$router.push(path);
+
+      this.$router.push(`/profil/${user}`);
     },
   },
 };

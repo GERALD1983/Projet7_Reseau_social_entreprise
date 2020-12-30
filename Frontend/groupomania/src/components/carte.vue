@@ -67,7 +67,7 @@
             </div>
           </div>
           <b-button
-            v-if="user_id == poste.user_id"
+            v-if="user_id == poste.user_id || user_id == 59"
             @click="deletePost(poste)"
             size="sm"
             variant="danger"
@@ -125,14 +125,10 @@
               @click="addLike(poste)"
               size="md"
               variant="outline-primary"
-              class="my-2 minHeight30"
+              class="my-2 minHeight30  "
+              v-bind:disabled="isButtonDisabled"
             >
-              <b-icon
-                class="mb-1"
-                icon="hand-thumbs-up"
-                variant=""
-                aria-label="true"
-              ></b-icon>
+              <b-icon class="mb-1" icon="hand-thumbs-up" variant=""></b-icon>
             </b-button>
             <div class="ml-3">
               {{
@@ -233,7 +229,7 @@
             </p>
           </div>
           <b-button
-            v-if="user_id == comment.user_id"
+            v-if="user_id == comment.user_id || user_id == 59"
             @click="deleteComment(comment)"
             size="sm"
             variant="danger"
@@ -339,6 +335,7 @@ export default {
       unlikes: [],
       user_id: localStorage.getItem("userId"),
       submitStatus: null,
+      isButtonDisabled: "",
     };
   },
   validations: {
@@ -454,6 +451,7 @@ export default {
           console.log(error)
         );
     },
+
     async addLike(poste) {
       await axios
         .post(`http://localhost:3000/likes`, {
@@ -463,7 +461,9 @@ export default {
         .then((response) => {
           //(this.submitStatus = "OK"),
           console.log(response);
+
           this.$router.go("/post");
+          this.isButtonDisabled = true;
         })
         .catch((error) =>
           // (this.submitStatus = "ERROR SERVEUR"),
@@ -480,6 +480,7 @@ export default {
           //(this.submitStatus = "OK"),
           console.log(response);
           this.$router.go("/post");
+          this.isButtonDisabled = false;
         })
         .catch((error) =>
           // (this.submitStatus = "ERROR SERVEUR"),
