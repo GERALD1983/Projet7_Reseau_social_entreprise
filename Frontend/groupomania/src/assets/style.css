@@ -85,3 +85,6 @@
 .cursor {
   cursor: pointer;
 }
+.afficher {
+  display: none;
+}

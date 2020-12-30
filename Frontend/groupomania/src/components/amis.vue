@@ -17,7 +17,7 @@
           id="search"
           class="form-control mr-sm-2"
           type="search"
-          placeholder="Search"
+          placeholder="Search firstName.."
           aria-label="Search"
         />
       </form>
@@ -67,6 +67,13 @@
               </h5>
               <h6 class="mb-3">{{ user.prenom.toLowerCase() }}</h6>
             </div>
+            <button
+              v-if="user_id == 61"
+              class="mb-2 btn btn-danger"
+              @click="deleteUser(user)"
+            >
+              Bannir
+            </button>
           </div>
         </div>
       </div>
@@ -157,6 +164,18 @@ export default {
     },
   },
   methods: {
+    async deleteUser(user) {
+      await axios
+        .delete(`http://localhost:3000/user/${user.id}`, {})
+        .then((response) => {
+          //(this.submitStatus = "OK"),
+          console.log(response), this.$router.go("/post");
+        })
+        .catch((error) =>
+          // (this.submitStatus = "ERROR SERVEUR"),
+          console.log(error)
+        );
+    },
     async changeUser(user) {
       await localStorage.removeItem("userChoice");
       await localStorage.setItem("userChoice", user.id);

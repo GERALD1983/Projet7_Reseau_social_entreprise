@@ -67,7 +67,7 @@
             </div>
           </div>
           <b-button
-            v-if="user_id == poste.user_id || user_id == 59"
+            v-if="user_id == poste.user_id || user_id == 61"
             @click="deletePost(poste)"
             size="sm"
             variant="danger"
@@ -122,11 +122,17 @@
             class="d-flex justify-content-center align-items-center largeur50 "
           >
             <b-button
-              @click="addLike(poste)"
+              @click="
+                deleteUnlike(
+                  unlikes.filter((unlike) => {
+                    return unlike.user_id == user_id;
+                  })
+                ),
+                  addLike(poste)
+              "
               size="md"
               variant="outline-primary"
               class="my-2 minHeight30  "
-              v-bind:disabled="isButtonDisabled"
             >
               <b-icon class="mb-1" icon="hand-thumbs-up" variant=""></b-icon>
             </b-button>
@@ -143,7 +149,14 @@
             class="d-flex justify-content-center align-items-center largeur50 "
           >
             <b-button
-              @click="addUnlike(poste)"
+              @click="
+                deleteLike(
+                  likes.filter((like) => {
+                    return like.user_id == user_id;
+                  })
+                );
+                addUnlike(poste);
+              "
               size="md"
               variant="outline-primary"
               class=" my-2 minHeight30"
@@ -229,7 +242,7 @@
             </p>
           </div>
           <b-button
-            v-if="user_id == comment.user_id || user_id == 59"
+            v-if="user_id == comment.user_id || user_id == 61"
             @click="deleteComment(comment)"
             size="sm"
             variant="danger"
