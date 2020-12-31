@@ -81,7 +81,7 @@
         </div>
 
         <button
-          class="btn btn-light text-primary"
+          class="mt-5 btnLogin btn btn-light text-primary"
           type="submit"
           :disabled="submitStatus === 'PENDING'"
         >
@@ -101,12 +101,14 @@
 
         <br />
         <br />
+        <!--
         <button type="button" v-on:click="update()">
           mettre a jour test
         </button>
         <ul>
           <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
         </ul>
+        -->
       </form>
     </div>
     <div class="bg-primary col-sm-2"></div>
@@ -183,6 +185,7 @@ export default {
           );
       }
     },
+    /*
     update() {
       this.users = [];
       axios
@@ -190,6 +193,7 @@ export default {
         .then((response) => (this.users = response.data))
         .catch((error) => console.log(error));
     },
+    */
   },
 };
 </script>

@@ -21,7 +21,7 @@
       <router-link class="text-white" to="/login">Login</router-link>
     </div>
     <div class="bg-primary text-white stopPadMarg col-lg-4">
-      <form @submit.prevent="submit" class="col-md-12">
+      <form @submit.prevent="submit" class="bg-primary col-md-12">
         <img
           src="../assets/image/icon-left-font-monochrome-white.png"
           width="200"
@@ -129,7 +129,7 @@
         </div>
 
         <button
-          class="btn btn-light text-primary"
+          class="my-5 btn btn-light text-primary"
           type="submit"
           :disabled="submitStatus === 'PENDING'"
         >
@@ -148,12 +148,14 @@
 
         <br />
         <br />
+        <!--
         <button type="button" v-on:click="update()">
           mettre a jour test
         </button>
         <ul>
           <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
         </ul>
+        -->
       </form>
     </div>
     <div class="bg-primary col-sm-2"></div>
@@ -233,6 +235,7 @@ export default {
           );
       }
     },
+    /*
     update() {
       this.users = [];
       axios
@@ -240,6 +243,7 @@ export default {
         .then((response) => (this.users = response.data))
         .catch((error) => console.log(error));
     },
+    */
   },
 };
 </script>

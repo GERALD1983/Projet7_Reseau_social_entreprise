@@ -3,7 +3,7 @@
     <form
       @submit.prevent="submit"
       enctype="multipart/form-data"
-      class="largeur80 my-5 shadow bordurePost bordureRond"
+      class="largeur80 l100 my-5 shadow bordurePost bordureRond"
     >
       <div class="form-group">
         <label class="text-primary" for="titre">Titre du post</label>

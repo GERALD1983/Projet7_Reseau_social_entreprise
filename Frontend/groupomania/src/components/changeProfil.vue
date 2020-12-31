@@ -11,15 +11,18 @@
       />
     </div>
     <div
-      class="d-flex flex-column align-items-center justify-content-center col-md-7"
+      class="stopPRL d-flex flex-column align-items-center justify-content-center col-md-7"
     >
       <div class="container" v-if="user_id == 61">
         <Admin />
       </div>
       <div
-        class="container d-flex justify-content-center hauteur400 my-5 card bordureProfil border-primary bordureRond shadow"
+        class="l100 ajustProfil container d-flex justify-content-center hauteur400 my-5 card bordureProfil border-primary bordureRond shadow"
       >
         <FormProfil />
+      </div>
+      <div class="copyright text-secondary">
+        <h4>@ Copyright Gerald Ferron</h4>
       </div>
     </div>
     <div class="py-5 stopPadMarg bg-primary col-md-1">

@@ -6,7 +6,7 @@
     <div
       v-for="(poste, id) in filterPost.slice().reverse()"
       v-bind:key="id"
-      class="largeur70 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
+      class="largeur70 larg100 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
     >
       <div class="card-body p-3 container-fluid">
         <div class="d-flex justify-content-between">

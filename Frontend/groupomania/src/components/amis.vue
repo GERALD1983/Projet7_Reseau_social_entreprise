@@ -10,7 +10,7 @@
         alt="logo"
       />
     </div>
-    <div class="largeur80">
+    <div class="largeur80 larg100">
       <form class="justify-content-center form-inline py-3 my-2 my-lg-0">
         <input
           v-model="searchKey"
@@ -26,19 +26,19 @@
           class="backPrimaire opacity mx-1 text-primary bordurePost bordureRond"
         >
           <b-icon-chevron-double-down
-            class="mr-5 my-1 pt-1 text-secondary"
+            class="stopMRL mr-5 my-1 pt-1 text-secondary"
             animation="cylon-vertical"
             font-scale="1"
           ></b-icon-chevron-double-down>
           Vos collegues
           <b-icon-chevron-double-down
-            class="ml-5 my-1 pt-1 text-secondary"
+            class="stopMRL ml-5 my-1 pt-1 text-secondary"
             animation="cylon-vertical"
             font-scale="1"
           ></b-icon-chevron-double-down>
         </h3>
       </div>
-      <div class="hauteur">
+      <div class="hauteur h100">
         <div class="mt-5 d-flex flex-wrap">
           <div
             v-for="(user, id) in filteredList"
