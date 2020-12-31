@@ -123,12 +123,18 @@
           >
             <b-button
               @click="
-                deleteUnlike(
-                  unlikes.filter((unlike) => {
-                    return unlike.user_id == user_id;
-                  })
-                ),
-                  addLike(poste)
+                addLike(
+                  poste,
+                  unlikes
+                    .map((unlike) => {
+                      if (
+                        unlike.user_id == user_id &&
+                        unlike.post_id == poste.id
+                      )
+                        return unlike.id;
+                    })
+                    .join('')
+                )
               "
               size="md"
               variant="outline-primary"
@@ -150,12 +156,15 @@
           >
             <b-button
               @click="
-                deleteLike(
-                  likes.filter((like) => {
-                    return like.user_id == user_id;
-                  })
-                );
-                addUnlike(poste);
+                addUnlike(
+                  poste,
+                  likes
+                    .map((like) => {
+                      if (like.user_id == user_id && like.post_id == poste.id)
+                        return like.id;
+                    })
+                    .join('')
+                )
               "
               size="md"
               variant="outline-primary"
@@ -465,41 +474,72 @@ export default {
         );
     },
 
-    async addLike(poste) {
-      await axios
-        .post(`http://localhost:3000/likes`, {
-          post_id: poste.id,
-          user_id: this.user_id,
-        })
-        .then((response) => {
-          //(this.submitStatus = "OK"),
-          console.log(response);
+    addLike(poste, unlike) {
+      console.log(unlike);
+      if (unlike) {
+        axios
+          .delete(`http://localhost:3000/unlike/${unlike}`, {})
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      } else {
+        axios
+          .post(`http://localhost:3000/likes`, {
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
 
-          this.$router.go("/post");
-          this.isButtonDisabled = true;
-        })
-        .catch((error) =>
-          // (this.submitStatus = "ERROR SERVEUR"),
-          console.log(error)
-        );
+            this.$router.go("/post");
+            this.isButtonDisabled = true;
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      }
     },
-    async addUnlike(poste) {
-      await axios
-        .post(`http://localhost:3000/unlikes`, {
-          post_id: poste.id,
-          user_id: this.user_id,
-        })
-        .then((response) => {
-          //(this.submitStatus = "OK"),
-          console.log(response);
-          this.$router.go("/post");
-          this.isButtonDisabled = false;
-        })
-        .catch((error) =>
-          // (this.submitStatus = "ERROR SERVEUR"),
-          console.log(error)
-        );
+    addUnlike(poste, like) {
+      console.log(like);
+      if (like) {
+        axios
+          .delete(`http://localhost:3000/like/${like}`, {})
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      } else {
+        axios
+          .post(`http://localhost:3000/unlikes`, {
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+            this.isButtonDisabled = false;
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      }
     },
+    /*
     async deleteLike(like) {
       await axios
         .delete(`http://localhost:3000/like/${like.id}`, {})
@@ -513,6 +553,8 @@ export default {
           console.log(error)
         );
     },
+    */
+    /*
     async deleteUnlike(unlike) {
       await axios
         .delete(`http://localhost:3000/unlike/${unlike.id}`, {})
@@ -526,6 +568,7 @@ export default {
           console.log(error)
         );
     },
+    */
   },
 };
 </script>
