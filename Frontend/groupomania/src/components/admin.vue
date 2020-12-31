@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <button class=" my-3 btn btn-primary" @click="afficherMasquer()">
+    <button class="btnModere my-3 btn btn-primary" @click="afficherMasquer()">
       Moderer commentaires
     </button>
     <div id="mask" class="afficher">

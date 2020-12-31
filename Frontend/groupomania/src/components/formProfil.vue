@@ -22,7 +22,7 @@
           <button
             v-if="user_id == user.id"
             @click="deletePost(user)"
-            class="mt-3 btn btn-sm btn-outline-danger"
+            class="btnsup mt-3 btn btn-sm btn-outline-danger"
           >
             Supprimer compte <b-icon icon="exclamation-triangle"></b-icon>
           </button>
