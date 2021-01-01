@@ -113,6 +113,96 @@
           </div>
         </div>
 
+        <!-- likes -->
+
+        <div class="mb-3 d-flex bordurePost">
+          <!--likes-->
+          <div
+            class="d-flex justify-content-center align-items-center largeur50 "
+          >
+            <b-button
+              @click="
+                addLike(
+                  poste,
+                  unlikes
+                    .map((unlike) => {
+                      if (
+                        unlike.user_id == user_id &&
+                        unlike.post_id == poste.id
+                      )
+                        return unlike.id;
+                    })
+                    .join(''),
+                  likes
+                    .map((like) => {
+                      if (like.user_id == user_id && like.post_id == poste.id)
+                        return like.id;
+                    })
+                    .join('')
+                )
+              "
+              size="md"
+              variant="outline-primary"
+              class="my-2 minHeight30  "
+            >
+              <b-icon class="mb-1" icon="hand-thumbs-up" variant=""></b-icon>
+            </b-button>
+            <div class="ml-3">
+              {{
+                likes.filter((like) => {
+                  return like.post_id == poste.id;
+                }).length
+              }}
+            </div>
+          </div>
+          <!--unlikes-->
+          <div
+            class="d-flex justify-content-center align-items-center largeur50 "
+          >
+            <b-button
+              @click="
+                addUnlike(
+                  poste,
+                  likes
+                    .map((like) => {
+                      if (like.user_id == user_id && like.post_id == poste.id)
+                        return like.id;
+                    })
+                    .join(''),
+                  unlikes
+                    .map((unlike) => {
+                      if (
+                        unlike.user_id == user_id &&
+                        unlike.post_id == poste.id
+                      )
+                        return unlike.id;
+                    })
+                    .join('')
+                )
+              "
+              size="md"
+              variant="outline-primary"
+              class=" my-2 minHeight30"
+            >
+              <b-icon
+                class="mb-1"
+                icon="hand-thumbs-down"
+                variant=""
+                aria-label="false"
+              ></b-icon>
+            </b-button>
+            <div class="ml-3">
+              {{
+                unlikes.filter((unlike) => {
+                  return unlike.post_id == poste.id;
+                }).length
+              }}
+            </div>
+          </div>
+        </div>
+
+        <!-- fin likes -->
+
         <div
           v-for="(comment, id) in comments.filter((comment) => {
             return comment.post_id == poste.id;
@@ -282,6 +372,8 @@ export default {
       userDef: [],
       userConnect: [],
       comments: [],
+      likes: [],
+      unlikes: [],
       user_id: localStorage.getItem("userId"),
       userChoice: localStorage.getItem("userChoice"),
       submitStatus: null,
@@ -429,6 +521,72 @@ export default {
           // (this.submitStatus = "ERROR SERVEUR"),
           console.log(error)
         );
+    },
+
+    addLike(poste, unlike, like) {
+      console.log(unlike);
+      if (unlike) {
+        axios
+          .delete(`http://localhost:3000/unlike/${unlike}`, {})
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      } else if (!like) {
+        axios
+          .post(`http://localhost:3000/likes`, {
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+
+            this.$router.go("/post");
+            this.isButtonDisabled = true;
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      }
+    },
+    addUnlike(poste, like, unlike) {
+      console.log(like);
+      if (like) {
+        axios
+          .delete(`http://localhost:3000/like/${like}`, {})
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      } else if (!unlike) {
+        axios
+          .post(`http://localhost:3000/unlikes`, {
+            post_id: poste.id,
+            user_id: this.user_id,
+          })
+          .then((response) => {
+            //(this.submitStatus = "OK"),
+            console.log(response);
+            this.$router.go("/post");
+            this.isButtonDisabled = false;
+          })
+          .catch((error) =>
+            // (this.submitStatus = "ERROR SERVEUR"),
+            console.log(error)
+          );
+      }
     },
   },
 };

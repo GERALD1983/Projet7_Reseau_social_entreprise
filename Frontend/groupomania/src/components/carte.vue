@@ -372,7 +372,6 @@ export default {
       unlikes: [],
       user_id: localStorage.getItem("userId"),
       submitStatus: null,
-      isButtonDisabled: "",
     };
   },
   validations: {
