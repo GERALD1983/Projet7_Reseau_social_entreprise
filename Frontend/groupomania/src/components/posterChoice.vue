@@ -1,5 +1,6 @@
 <template>
   <section
+    @click="retourUser"
     class="stopPadMarg container-fluid d-md-flex justify-content-between"
   >
     <div class="py-5 stopPadMarg bg-primary col-md-1">
@@ -52,7 +53,14 @@ export default {
     CarteChoice,
   },
   data() {
-    return {};
+    return {
+      user_id: localStorage.getItem("userId"),
+    };
+  },
+  methods: {
+    retourUser() {
+      setInterval(localStorage.setItem("userChoice", this.user_id), 1000);
+    },
   },
   /*
   async created() {
