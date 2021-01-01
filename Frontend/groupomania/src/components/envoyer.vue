@@ -54,7 +54,7 @@
       <div
         class="form-group row d-flex align-item-center justify-content-center"
       >
-        <div class="col-sm-10 ">
+        <div class="my-3 col-sm-10 ">
           <button
             type="submit"
             class="bg-light btn btn-outline-primary"
