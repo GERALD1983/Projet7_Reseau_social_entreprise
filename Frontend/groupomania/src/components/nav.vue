@@ -57,19 +57,17 @@
                 >Trouver vos collegues</router-link
               >
             </li>
-            <li @click="myPoste">
-              <router-link class="dropdown-item" :to="`/profil/${userChoice}`"
+            <li v-if="userChoice == user_id" @click="myPoste">
+              <router-link class="dropdown-item" :to="myPoste"
                 >Trouver vos postes</router-link
               >
             </li>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Supprimer tous vos postes</a>
           </div>
         </li>
       </ul>
       <div class="d-flex justify-content-end">
         <ul class="navbar-nav mr-3">
-          <li class="ml-3 nav-item">
+          <li @click="acceuil" class="ml-3 nav-item">
             <router-link class="text-primary nav-link" to="/upProfil">
               <b-icon-person-circle class="pr-1"></b-icon-person-circle>Mon
               Compte</router-link
@@ -88,16 +86,20 @@ export default {
       token: localStorage.getItem("acces_token"),
       user_id: localStorage.getItem("userId"),
       userChoice: localStorage.getItem("userChoice"),
+      /*
       watch: {
         "$route.params.user_id"() {
           this.reloadAllStuff();
         },
       },
+      */
     };
   },
+  /*
   created() {
     this.userChoice = this.$route.params.user_id;
   },
+  */
   methods: {
     deconnecte() {
       localStorage.removeItem("acces_token");
@@ -113,13 +115,21 @@ export default {
       //const userChoice = localStorage.getItem("userChoice");
     },
     async myPoste() {
+      //await localStorage.removeItem("userChoice");
       await localStorage.setItem("userChoice", this.user_id);
-      const user = localStorage.getItem("userId");
+      await localStorage.getItem("userChoice");
+      //this.$route.params.user_id;
 
-      //const path = `/profil/${this.user_id}`;
-      //if (this.$route.path !== path) this.$router.push(path);
+      // await this.$router.push(`/profil/${user_id}`);
 
-      this.$router.push(`/profil/${user}`);
+      // localStorage.removeItem("userChoice");
+      //localStorage.setItem("userChoice", this.user_id);
+      //const user = localStorage.getItem("userId");
+
+      //const path = `/profil/${this.userChoice}`;
+      //if (this.$route.path == path) this.$router.push(path);
+
+      await this.$router.push(`/profil/${this.userChoice}`);
     },
   },
 };

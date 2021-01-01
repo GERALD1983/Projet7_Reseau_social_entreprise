@@ -133,6 +133,12 @@
                       )
                         return unlike.id;
                     })
+                    .join(''),
+                  likes
+                    .map((like) => {
+                      if (like.user_id == user_id && like.post_id == poste.id)
+                        return like.id;
+                    })
                     .join('')
                 )
               "
@@ -162,6 +168,15 @@
                     .map((like) => {
                       if (like.user_id == user_id && like.post_id == poste.id)
                         return like.id;
+                    })
+                    .join(''),
+                  unlikes
+                    .map((unlike) => {
+                      if (
+                        unlike.user_id == user_id &&
+                        unlike.post_id == poste.id
+                      )
+                        return unlike.id;
                     })
                     .join('')
                 )
@@ -474,7 +489,7 @@ export default {
         );
     },
 
-    addLike(poste, unlike) {
+    addLike(poste, unlike, like) {
       console.log(unlike);
       if (unlike) {
         axios
@@ -488,7 +503,7 @@ export default {
             // (this.submitStatus = "ERROR SERVEUR"),
             console.log(error)
           );
-      } else {
+      } else if (!like) {
         axios
           .post(`http://localhost:3000/likes`, {
             post_id: poste.id,
@@ -507,7 +522,7 @@ export default {
           );
       }
     },
-    addUnlike(poste, like) {
+    addUnlike(poste, like, unlike) {
       console.log(like);
       if (like) {
         axios
@@ -521,7 +536,7 @@ export default {
             // (this.submitStatus = "ERROR SERVEUR"),
             console.log(error)
           );
-      } else {
+      } else if (!unlike) {
         axios
           .post(`http://localhost:3000/unlikes`, {
             post_id: poste.id,

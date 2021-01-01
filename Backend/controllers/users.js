@@ -48,6 +48,7 @@ exports.updateUser = (req, res) => {
   });
 
   //save user
+
   User.updateById(req.params.userId, user, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

@@ -30,7 +30,7 @@ const routes = [
     },
   },
   {
-    path: `/profil/:user_id`, //${userProfil}
+    path: `/profil/:userChoice`, //${userProfil}
     name: "ProfilUser",
     component: ProfilChoice,
     meta: {
