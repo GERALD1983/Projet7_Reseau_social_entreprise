@@ -1,7 +1,9 @@
 <template>
+  <!-- component login -->
   <section
     class="hauteur stopPadMarg container-fluid d-sm-flex justify-content-between"
   >
+    <!-- debut Menu navigation page de login -->
     <div class="stopPadMarg bg-primary col-sm-2">
       <br />
       <img
@@ -12,16 +14,16 @@
       />
       <br />
       <br />
-      <!--  <p class="text-white">S'inscrire</p> -->
 
-      <!-- <p class="stopPadMarg text-white">Se connecter</p> <router-link class="text-white" to="/login">login</router-link>-->
-      <!--  <p class="text-white">S'inscrire</p> -->
       <router-link class="text-white" to="/">S'inscrire</router-link>
       <br />
       <br />
-      <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
+
       <router-link class="text-white" to="/login">Login</router-link>
     </div>
+    <!-- fin Menu navigation page de login -->
+
+    <!-- debut formulaire envoi login -->
     <div class="bg-primary text-white stopPadMarg col-lg-4">
       <form @submit.prevent="submit" class="col-md-12">
         <img
@@ -101,16 +103,9 @@
 
         <br />
         <br />
-        <!--
-        <button type="button" v-on:click="update()">
-          mettre a jour test
-        </button>
-        <ul>
-          <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
-        </ul>
-        -->
       </form>
     </div>
+    <!-- fin formulaire envoi login -->
     <div class="bg-primary col-sm-2"></div>
   </section>
 </template>
@@ -134,6 +129,7 @@ export default {
       token: localStorage.getItem("acces_token") || null,
     };
   },
+  // modele de validation librairie vuelidate
   validations: {
     email: { required, email },
     mdp: {
@@ -151,6 +147,7 @@ export default {
     },
   },
   methods: {
+    // envoie du formulaire login
     submit() {
       console.log("requete ver serveur!");
       this.$v.$touch();
@@ -185,15 +182,6 @@ export default {
           );
       }
     },
-    /*
-    update() {
-      this.users = [];
-      axios
-        .get("http://localhost:3000/users")
-        .then((response) => (this.users = response.data))
-        .catch((error) => console.log(error));
-    },
-    */
   },
 };
 </script>

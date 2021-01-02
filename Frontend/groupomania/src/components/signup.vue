@@ -1,8 +1,10 @@
 <template>
+  <!-- component d'inscription page inscription -->
   <section
     id="app"
     class="hauteur stopPadMarg container-fluid d-sm-flex justify-content-between"
   >
+    <!-- debut colonne de navigation -->
     <div class="stopPadMarg bg-primary col-sm-2">
       <br />
       <img
@@ -13,13 +15,14 @@
       />
       <br />
       <br />
-      <!--  <p class="text-white">S'inscrire</p> -->
       <router-link class="text-white" to="/">S'inscrire</router-link>
       <br />
       <br />
-      <!-- <p class="stopPadMarg text-white">Se connecter</p> -->
       <router-link class="text-white" to="/login">Login</router-link>
     </div>
+    <!-- fin colonne de navigation -->
+
+    <!-- debut colonne du milieu formulaire inscription  -->
     <div class="bg-primary text-white stopPadMarg col-lg-4">
       <form @submit.prevent="submit" class="bg-primary col-md-12">
         <img
@@ -27,6 +30,8 @@
           width="200"
           alt="logo-titre"
         />
+
+        <!-- debut input a verifier avant validation -->
         <div class=" form-group">
           <label class="text-white" for="nom">
             Nom
@@ -127,7 +132,9 @@
         >
           Mot de passe doit contenir chiffre et lettre sans espace
         </div>
+        <!-- fin input a verifier avant validation -->
 
+        <!-- debut button verifie formulaire avant validation et attente response -->
         <button
           class="my-5 btn btn-light text-primary"
           type="submit"
@@ -148,16 +155,12 @@
 
         <br />
         <br />
-        <!--
-        <button type="button" v-on:click="update()">
-          mettre a jour test
-        </button>
-        <ul>
-          <li v-for="user in users" v-bind:key="user">{{ user.email }}</li>
-        </ul>
-        -->
+        <!-- fin button verifie formulaire avant validation et attente response -->
       </form>
     </div>
+    <!-- fin colonne du milieu formulaire inscription  -->
+
+    <!--  colonne de droite -->
     <div class="bg-primary col-sm-2"></div>
   </section>
 </template>
@@ -183,6 +186,8 @@ export default {
       submitStatus: null,
     };
   },
+
+  // methode validation vuelidate
   validations: {
     nom: { required, alpha, maxLength: maxLength(30) },
     prenom: { required, alpha, maxLength: maxLength(30) },
@@ -203,6 +208,7 @@ export default {
     },
   },
   methods: {
+    // envoie formulaire incription
     submit() {
       console.log("requete ver serveur!");
       this.$v.$touch();
@@ -235,15 +241,6 @@ export default {
           );
       }
     },
-    /*
-    update() {
-      this.users = [];
-      axios
-        .get("http://localhost:3000/users")
-        .then((response) => (this.users = response.data))
-        .catch((error) => console.log(error));
-    },
-    */
   },
 };
 </script>

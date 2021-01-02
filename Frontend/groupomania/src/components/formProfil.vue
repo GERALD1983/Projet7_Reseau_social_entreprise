@@ -1,6 +1,8 @@
 <template>
+  <!-- component d'envoi de modification profil user connecter -->
   <div>
     <form @submit.prevent="submit" enctype="multipart/form-data">
+      <!-- debut change image user si ajoute image -->
       <div class="d-flex align-item-center justify-content-between">
         <img
           v-if="user.image_url !== null"
@@ -21,14 +23,16 @@
         <div>
           <button
             v-if="user_id == user.id"
-            @click="deletePost(user)"
+            @click="deleteUser(user)"
             class="btnsup mt-3 btn btn-sm btn-outline-danger"
           >
             Supprimer compte <b-icon icon="exclamation-triangle"></b-icon>
           </button>
         </div>
       </div>
+      <!-- fin change image user -->
 
+      <!-- debut verification formulaire imput nom prenom ville -->
       <div class="form-row mt-3">
         <div class="col-md-6 mb-3">
           <label for="nom">Nom : {{ user.nom }} </label>
@@ -96,21 +100,25 @@
           </div>
         </div>
       </div>
+      <!-- fin verification formulaire imput nom prenom ville -->
 
+      <!-- upload image -->
       <div class="form-group">
         <label class="text-center" for="image"
-          >Ajouter une image ou multimedia</label
+          ><span class="text-primary mb-1">Ajouter une image de Profil </span>
+          <br />
+          (En cas de modif si vous n'ajouter pas d'image image sera par
+          defaut)</label
         >
-        <input type="file" ref="image" class="file-input" @change="upload" />
+        <input
+          type="file"
+          ref="image"
+          class="file-input mt-1"
+          @change="upload"
+        />
       </div>
-      <!--
-      <div
-        class="error"
-        v-if="!$v.image_url.required && submitStatus === 'ERROR'"
-      >
-        Field is required
-      </div>
-  -->
+
+      <!-- button envoie formData verif form et attente reponse serveur-->
       <button
         class="mb-1 mt-5 btn btn-primary backPrimaire"
         type="submit"
@@ -152,18 +160,23 @@ export default {
       submitStatus: null,
     };
   },
+
+  // modele de validation vuelidate
   validations: {
     nom: { required, alpha, maxLength: maxLength(30) },
     prenom: { required, alpha, maxLength: maxLength(30) },
     ville: { required, alpha, maxLength: maxLength(30) },
-    image_url: {},
+    //image_url: {},
   },
   methods: {
+    // upload l'image
     upload() {
       this.image = this.$refs.image.files[0];
       console.log(this.image);
     },
-    deletePost(user) {
+
+    // supprime le compte de l user connecter
+    deleteUser(user) {
       axios
         .delete(`http://localhost:3000/user/${user.id}`, {})
         .then((response) => {
@@ -175,6 +188,8 @@ export default {
           console.log(error)
         );
     },
+
+    // envoie le formulaire et update profil
     submit() {
       const formData = new FormData();
       if (this.image !== null || "") {
@@ -213,6 +228,8 @@ export default {
       }
     },
   },
+
+  // recupere infos du user connecter
   async created() {
     this.user = [];
     //this.postes = [];

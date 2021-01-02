@@ -67,23 +67,42 @@ exports.updateUser = (req, res) => {
 // Delete a User with the specified userId in the request
 exports.deleteUser = (req, res) => {
   User.findById(req.params.userId, (err, user, data) => {
-    const filename = user.image_url.split("/images/")[1];
-    if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found User with id ${req.params.userId}.`,
-        });
+    if (user.image_url !== null) {
+      const filename = user.image_url.split("/images/")[1];
+
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found User with id ${req.params.userId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving User with id " + req.params.userId,
+          });
+        }
       } else {
-        res.status(500).send({
-          message: "Error retrieving User with id " + req.params.userId,
+        fs.unlink(`images/${filename}`, () => {
+          User.remove(req.params.userId, (err, data) => {
+            res.send({ message: `User was deleted successfully!` });
+          });
         });
       }
     } else {
-      fs.unlink(`images/${filename}`, () => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found User with id ${req.params.userId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving User with id " + req.params.userId,
+          });
+        }
+      } else {
         User.remove(req.params.userId, (err, data) => {
           res.send({ message: `User was deleted successfully!` });
         });
-      });
+      }
     }
   });
 };

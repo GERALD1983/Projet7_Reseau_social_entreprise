@@ -364,7 +364,7 @@
     </div>
   </div>
   <div v-else class="my-4">
-    <h1>Pas de poste actuellement</h1>
+    <h1 class="margFull">Pas de poste actuellement</h1>
   </div>
 </template>
 
