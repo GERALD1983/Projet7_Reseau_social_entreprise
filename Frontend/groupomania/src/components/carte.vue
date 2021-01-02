@@ -8,6 +8,7 @@
       class="largeur70 larg100 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
     >
       <div class="card-body p-3 container-fluid">
+        <!-- debut information user et suppression poste -->
         <div class="d-flex justify-content-between">
           <div class="d-flex">
             <img
@@ -80,7 +81,9 @@
             ></b-icon>
           </b-button>
         </div>
+        <!-- fin information user -->
 
+        <!-- debut corps du poste -->
         <h4 class=" largeur100 card-title">{{ poste.titre }}</h4>
         <div class=" my-3">
           <img
@@ -114,7 +117,9 @@
             {{ poste.description }}
           </div>
         </div>
-        <!-- likes -->
+        <!-- fin corps du poste -->
+
+        <!-- debut likes unlikes -->
 
         <div class="mb-3 d-flex bordurePost">
           <!--likes-->
@@ -201,8 +206,9 @@
             </div>
           </div>
         </div>
+        <!-- fin likes unlikes  -->
 
-        <!-- fin likes -->
+        <!-- debut affichage comments -->
         <div
           v-for="(comment, id) in comments.filter((comment) => {
             return comment.post_id == poste.id;
@@ -291,6 +297,9 @@
             ></b-icon>
           </b-button>
         </div>
+        <!-- fin affichage comments -->
+
+        <!-- debut envoie comment-->
         <form @submit.prevent="submit(poste)" class="mt-1 form-group">
           <label class="text-primary" for="commentaire"
             >Laisser un commentaire</label
@@ -351,6 +360,7 @@
           </p>
           <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
         </form>
+        <!-- fin envoie comment-->
       </div>
     </div>
   </div>
@@ -374,17 +384,18 @@ export default {
       submitStatus: null,
     };
   },
+
+  // valide comment
   validations: {
     commentaire: { required, maxLength: maxLength(200) },
   },
-  computed: {},
 
+  // recupere differente route
   async created() {
     this.postes = [];
     this.users = [];
-
     this.userConnect = [];
-    //this.postes = [];
+
     await axios
       .get("http://localhost:3000/postes")
       .then(
@@ -435,6 +446,7 @@ export default {
   },
 
   methods: {
+    // fonction envoie comment
     async submit(poste) {
       console.log("requete ver serveur!");
       this.$v.$touch();
@@ -463,6 +475,7 @@ export default {
           );
       }
     },
+    // fonction delete post
     async deletePost(poste) {
       await axios
         .delete(`http://localhost:3000/poste/${poste.id}`, {})
@@ -475,6 +488,7 @@ export default {
           console.log(error)
         );
     },
+    // fonction delete comment
     async deleteComment(comment) {
       await axios
         .delete(`http://localhost:3000/commentaire/${comment.id}`, {})
@@ -487,7 +501,7 @@ export default {
           console.log(error)
         );
     },
-
+    // fonction addlike et delete unlike
     addLike(poste, unlike, like) {
       console.log(unlike);
       if (unlike) {
@@ -521,6 +535,7 @@ export default {
           );
       }
     },
+    //fonction addunlike et delete like
     addUnlike(poste, like, unlike) {
       console.log(like);
       if (like) {
@@ -553,36 +568,6 @@ export default {
           );
       }
     },
-    /*
-    async deleteLike(like) {
-      await axios
-        .delete(`http://localhost:3000/like/${like.id}`, {})
-        .then((response) => {
-          //(this.submitStatus = "OK"),
-          console.log(response);
-          // this.$router.go("/post");
-        })
-        .catch((error) =>
-          // (this.submitStatus = "ERROR SERVEUR"),
-          console.log(error)
-        );
-    },
-    */
-    /*
-    async deleteUnlike(unlike) {
-      await axios
-        .delete(`http://localhost:3000/unlike/${unlike.id}`, {})
-        .then((response) => {
-          //(this.submitStatus = "OK"),
-          console.log(response);
-          // this.$router.go("/post");
-        })
-        .catch((error) =>
-          // (this.submitStatus = "ERROR SERVEUR"),
-          console.log(error)
-        );
-    },
-    */
   },
 };
 </script>
