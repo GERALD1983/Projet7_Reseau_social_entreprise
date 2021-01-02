@@ -7,11 +7,13 @@ import ModifProfil from "../views/ModifProfil.vue";
 import Data from "../components/Connecter.vue";
 import Profil from "../views/Profil.vue";
 import ProfilChoice from "../views/ProfilChoice.vue";
+// import views
 
 Vue.use(VueRouter);
 
 //const userChoice = localStorage.getItem("userChoice");
 
+// routes
 const routes = [
   {
     path: "/",
@@ -64,10 +66,13 @@ const routes = [
   },
 ];
 
+// router
 const router = new VueRouter({
   mode: "history",
   routes,
 });
+
+// navigation guard
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((routes) => routes.meta.requiresAuth)) {

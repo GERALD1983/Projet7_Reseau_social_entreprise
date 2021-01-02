@@ -3,10 +3,14 @@ import Vuelidate from "vuelidate";
 import axios from "axios";
 import App from "./App.vue";
 
+// importe differente librairie
+
 axios.defaults.headers.common["Authorization"] =
   "Bearer" + " " + localStorage.getItem("acces_token");
+
 //import Acceuil from "./views/Acceuil.vue";
 //import Login from "./views/Login.vue";
+
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 import "./assets/custom.scss";
@@ -15,6 +19,8 @@ import router from "./router";
 
 //Vue.use(Vuelidate);
 //Vue.use(axios);
+
+// rassemble les module ensemble
 [
   [router],
   [Vuelidate],
