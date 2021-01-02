@@ -58,7 +58,7 @@
               >
             </li>
             <li v-if="userChoice == user_id" @click="myPoste">
-              <router-link class="dropdown-item" :to="myPoste"
+              <router-link class="dropdown-item" :to="{ myPoste }"
                 >Trouver vos postes</router-link
               >
             </li>

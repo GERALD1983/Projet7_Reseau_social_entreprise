@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const connection = require("../ConnexionBDD/connect");
 
+// modele comment
 const Commentaire = function (commentaire) {
   this.comment = commentaire.comment;
   this.post_id = commentaire.post_id;
@@ -8,6 +9,7 @@ const Commentaire = function (commentaire) {
   //this.date_cree = commentaire.date_cree;
 };
 
+// cree un comment
 Commentaire.create = (newCommentaire, result) => {
   connection.query(
     `INSERT INTO Commentaires SET ?, date_cree = NOW()`,
@@ -28,6 +30,8 @@ Commentaire.create = (newCommentaire, result) => {
     }
   );
 };
+
+// find comment
 
 Commentaire.findById = (commentaireId, result) => {
   connection.query(
@@ -51,6 +55,8 @@ Commentaire.findById = (commentaireId, result) => {
   );
 };
 
+// find All comment
+
 Commentaire.getAll = (result) => {
   connection.query("SELECT * FROM Commentaires", (err, res) => {
     if (err) {
@@ -63,6 +69,8 @@ Commentaire.getAll = (result) => {
     result(null, res);
   });
 };
+
+//update Comment
 
 Commentaire.updateById = (id, commentaire, result) => {
   connection.query(
@@ -92,6 +100,8 @@ Commentaire.updateById = (id, commentaire, result) => {
   );
 };
 
+// delete one comment with id
+
 Commentaire.remove = (id, result) => {
   connection.query("DELETE FROM Commentaires WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -110,6 +120,8 @@ Commentaire.remove = (id, result) => {
     result(null, res);
   });
 };
+
+// delete All comment
 
 Commentaire.removeAll = (result) => {
   connection.query("DELETE FROM Commentaires", (err, res) => {

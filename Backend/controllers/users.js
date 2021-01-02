@@ -87,6 +87,19 @@ exports.deleteUser = (req, res) => {
     }
   });
 };
+
+// Delete all Users from the database.
+exports.deleteAllUsers = (req, res) => {
+  User.removeAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while removing all users.",
+      });
+    else res.send({ message: `All Users were deleted successfully!` });
+  });
+};
+
+// Code commenter ensuite test que je garde en reserve
 /*
 exports.deleteUser = (req, res) => {
   User.remove(req.params.userId, (err, data) => {
@@ -104,13 +117,3 @@ exports.deleteUser = (req, res) => {
   });
 };
 */
-// Delete all Users from the database.
-exports.deleteAllUsers = (req, res) => {
-  User.removeAll((err, data) => {
-    if (err)
-      res.status(500).send({
-        message: err.message || "Some error occurred while removing all users.",
-      });
-    else res.send({ message: `All Users were deleted successfully!` });
-  });
-};

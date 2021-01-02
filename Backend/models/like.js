@@ -1,12 +1,14 @@
 const mysql = require("mysql");
 const connection = require("../ConnexionBDD/connect");
 
+// Modele like
 const Like = function (like) {
   this.post_id = like.post_id;
   this.user_id = like.user_id;
   //this.date_cree = poste.date_cree;
 };
 
+// create like
 Like.createLike = (newLike, result) => {
   connection.query(`INSERT INTO Users_likes SET ?`, newLike, (err, res) => {
     if (err) {
@@ -20,6 +22,7 @@ Like.createLike = (newLike, result) => {
   });
 };
 
+// delete like with id
 Like.remove = (id, result) => {
   connection.query("DELETE FROM Users_likes WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -39,6 +42,7 @@ Like.remove = (id, result) => {
   });
 };
 
+// delete All like
 Like.getAll = (result) => {
   connection.query("SELECT * FROM users_likes", (err, res) => {
     if (err) {

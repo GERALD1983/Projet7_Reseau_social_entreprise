@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
 const maskData = require("maskdata");
 
+// methode masquage email
 const emailMaskOptions = {
   maskWith: "*",
   unmaskedStartCharactersBeforeAt: 2,
@@ -11,6 +12,7 @@ const emailMaskOptions = {
   maskAtTheRate: false,
 };
 
+// module knex pour faire faire des requetes sql asynchrone
 const db = require("knex")({
   client: "mysql",
   connection: {
