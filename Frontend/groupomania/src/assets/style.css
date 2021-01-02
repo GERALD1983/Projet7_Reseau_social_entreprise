@@ -1,6 +1,18 @@
+/* reglage marge*/
+
 * {
   margin: 0 !important;
 }
+.stopPadMarg {
+  padding: 0;
+  margin: 0;
+}
+.m10 {
+  margin: 10%;
+}
+
+/*reglage des hauteur*/
+
 .hauteur {
   height: 100vh;
 }
@@ -22,9 +34,6 @@
 .hauteur400 {
   height: 600px;
 }
-.minwidth25 {
-  width: 25px;
-}
 .minHeight {
   min-height: 50px;
 }
@@ -34,10 +43,8 @@
 .minHeight30 {
   height: 30px;
 }
-.stopPadMarg {
-  padding: 0;
-  margin: 0;
-}
+
+/* reglage des largeur*/
 .largeur50 {
   width: 50%;
 }
@@ -53,26 +60,12 @@
 .largeur100 {
   width: 100%;
 }
-.texte {
-  overflow-wrap: break-word;
+.minwidth25 {
+  width: 25px;
 }
-.cube100 {
-  width: 100px;
-  height: 100px;
-}
-.cubeImage {
-  width: 35em;
-  height: 20em;
-}
-.m10 {
-  margin: 10%;
-}
-.opacity {
-  opacity: 0.5;
-}
-.stopOpac {
-  opacity: 1;
-}
+
+/* bordure des cartes etc*/
+
 .bordureProfil {
   border: 3mm ridge #ffd7d7ff;
 }
@@ -84,6 +77,26 @@
 }
 .backPrimaire {
   background-color: rgb(253, 236, 236);
+}
+
+/* css divers retouche*/
+
+.texte {
+  overflow-wrap: break-word;
+}
+.cube100 {
+  width: 100px;
+  height: 100px;
+}
+.cubeImage {
+  width: 35em;
+  height: 20em;
+}
+.opacity {
+  opacity: 0.5;
+}
+.stopOpac {
+  opacity: 1;
 }
 .cursor {
   cursor: pointer;
