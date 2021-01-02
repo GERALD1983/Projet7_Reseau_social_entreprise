@@ -1,5 +1,7 @@
 <template>
+  <!-- component envoi formulaire pour les post emis par le user connecter -->
   <div class="d-flex justify-content-center">
+    <!-- debut check formulaire -->
     <form
       @submit.prevent="submit"
       enctype="multipart/form-data"
@@ -43,14 +45,9 @@
         <br />
         <input type="file" ref="image" class="file-input" @change="upload" />
       </div>
-      <!--
-      <div
-        class="error"
-        v-if="!$v.image_link.required && submitStatus === 'ERROR'"
-      >
-        Field is required
-      </div>
-      -->
+      <!-- fin check formulaire -->
+
+      <!-- check formulaire bien rempli et reponse serveur bouton publier -->
       <div
         class="form-group row d-flex align-item-center justify-content-center"
       >
@@ -95,6 +92,8 @@ export default {
       submitStatus: null,
     };
   },
+
+  // Modele de validation librairie vuelidate
   validations: {
     titre: { required, maxLength: maxLength(100) },
     description: { required, maxLength: maxLength(500) },
@@ -102,11 +101,13 @@ export default {
   },
 
   methods: {
+    // pour upload image ou video
     upload() {
       this.image = this.$refs.image.files[0];
       console.log(this.image);
     },
 
+    // methode d'envoi formulaire avec une image et ou une video
     submit() {
       const formData = new FormData();
       if (this.image !== null || "") {

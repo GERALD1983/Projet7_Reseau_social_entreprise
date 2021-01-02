@@ -1,4 +1,5 @@
 <template>
+  <!-- component rassemble 2 components fil actualite des postes users -->
   <section
     class="stopPadMarg container-fluid d-md-flex justify-content-between"
   >

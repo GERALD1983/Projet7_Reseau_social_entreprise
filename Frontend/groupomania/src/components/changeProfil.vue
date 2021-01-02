@@ -1,4 +1,5 @@
 <template>
+  <!-- composant reuni 2 composant changement profil et modere commentaire -->
   <section
     class="hauteur100 stopPadMarg container-fluid d-md-flex justify-content-between"
   >
@@ -13,6 +14,7 @@
     <div
       class="stopPRL d-flex flex-column align-items-center justify-content-center col-md-7"
     >
+      <!-- affiche seulement a l 'admin le compoant admin-->
       <div class="container" v-if="user_id == 61">
         <Admin />
       </div>

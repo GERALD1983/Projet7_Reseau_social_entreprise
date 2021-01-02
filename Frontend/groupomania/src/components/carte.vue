@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="postes.length !== 0"
     class=" d-flex flex-column my-5 align-items-center justify-content-center "
   >
     <div
@@ -363,6 +364,9 @@
         <!-- fin envoie comment-->
       </div>
     </div>
+  </div>
+  <div v-else class="my-4">
+    <h1 class="margFull">Pas de poste actuellement</h1>
   </div>
 </template>
 

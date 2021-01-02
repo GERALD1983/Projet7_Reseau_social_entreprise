@@ -1,6 +1,6 @@
 <template>
+  <!-- component rassemble 2 components pour la page du profil choisit parmis collegues ou poste user-->
   <section
-    @click="retourUser"
     class="stopPadMarg container-fluid d-md-flex justify-content-between"
   >
     <div class="py-5 stopPadMarg bg-primary col-md-1">
@@ -57,25 +57,6 @@ export default {
       user_id: localStorage.getItem("userId"),
     };
   },
-  methods: {
-    retourUser() {
-      setInterval(localStorage.setItem("userChoice", this.user_id), 1000);
-    },
-  },
-  /*
-  async created() {
-    await axios
-      .get(`http://localhost:3000/postes/${poste.id}`, {})
-      .then((response) => {
-        //(this.submitStatus = "OK"),
-        console.log(response), this.$router.go("/post");
-      })
-      .catch((error) =>
-        // (this.submitStatus = "ERROR SERVEUR"),
-        console.log(error)
-      );
-  },
-  */
 };
 </script>
 

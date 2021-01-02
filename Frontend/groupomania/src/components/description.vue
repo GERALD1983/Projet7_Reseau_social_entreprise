@@ -1,4 +1,5 @@
 <template>
+  <!-- component affiche carte de profil choisi parmis les collegues ou trouver mes postes-->
   <div class="mb-3 d-flex justify-content-center">
     <div class="largeur80 my-5 shadow bordurePost bordureRond">
       <div class="mt-3">
@@ -53,6 +54,7 @@ export default {
       userChoice: localStorage.getItem("userChoice"),
     };
   },
+  // recupere les infos du profil choisi parmi la route trouver collegues ou trouver mes postes
   async created() {
     await axios
       .get(`http://localhost:3000/user/${this.userChoice}`)
