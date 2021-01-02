@@ -1,12 +1,14 @@
 const mysql = require("mysql");
 const connection = require("../ConnexionBDD/connect");
 
+// modele unlike
 const Unlike = function (unlike) {
   this.post_id = unlike.post_id;
   this.user_id = unlike.user_id;
   //this.date_cree = poste.date_cree;
 };
 
+//create unlike
 Unlike.createUnlike = (newUnlike, result) => {
   connection.query(
     `INSERT INTO Users_dislikes SET ?`,
@@ -24,6 +26,7 @@ Unlike.createUnlike = (newUnlike, result) => {
   );
 };
 
+// delete like with id
 Unlike.remove = (id, result) => {
   connection.query(
     "DELETE FROM Users_dislikes WHERE id = ?",
@@ -47,6 +50,7 @@ Unlike.remove = (id, result) => {
   );
 };
 
+// find All like
 Unlike.getAllUnlikes = (result) => {
   connection.query("SELECT * FROM users_dislikes", (err, res) => {
     if (err) {

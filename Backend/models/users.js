@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const connection = require("../ConnexionBDD/connect");
 
-// constructor
+// constructor modele user
 const User = function (user) {
   this.email = user.email;
   this.mdp = user.mdp;
@@ -11,6 +11,7 @@ const User = function (user) {
   this.ville = user.ville;
 };
 
+// find user with id
 User.findById = (userId, result) => {
   connection.query(`SELECT * FROM User WHERE id = ${userId}`, (err, res) => {
     if (err) {
@@ -30,6 +31,7 @@ User.findById = (userId, result) => {
   });
 };
 
+// find All user
 User.getAll = (result) => {
   connection.query("SELECT * FROM user", (err, res) => {
     if (err) {
@@ -43,6 +45,7 @@ User.getAll = (result) => {
   });
 };
 
+// update user with id
 User.updateById = (id, user, result) => {
   connection.query(
     `UPDATE User SET nom = ?, prenom = ?, image_url = ?, ville = ?, date_modify = NOW() WHERE id = ?`,
@@ -74,6 +77,7 @@ User.updateById = (id, user, result) => {
   );
 };
 
+//delete user with id
 User.remove = (id, result) => {
   connection.query("DELETE FROM User WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -93,6 +97,7 @@ User.remove = (id, result) => {
   });
 };
 
+// delete All user
 User.removeAll = (result) => {
   connection.query("DELETE FROM user", (err, res) => {
     if (err) {

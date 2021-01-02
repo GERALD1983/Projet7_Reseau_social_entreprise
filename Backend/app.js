@@ -37,6 +37,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// securise session
 app.use(
   cookieSession({
     name: "session",
@@ -54,8 +55,10 @@ app.use(nocache());
 
 app.use(bodyParser.json());
 
+// traite image dans un fichier static
 app.use("/images", express.static(path.join(__dirname, "images")));
 
+// appel route
 app.use(loginRoutes);
 app.use(userRoutes);
 app.use(postRoutes);

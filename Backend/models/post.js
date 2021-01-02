@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const connection = require("../ConnexionBDD/connect");
 
+// Modele post
 const Poste = function (poste) {
   this.titre = poste.titre;
   this.description = poste.description;
@@ -12,6 +13,7 @@ const Poste = function (poste) {
   //this.date_cree = poste.date_cree;
 };
 
+// create post
 Poste.create = (newPoste, result) => {
   connection.query(
     `INSERT INTO Poster SET ?, date_cree = NOW()`,
@@ -29,6 +31,7 @@ Poste.create = (newPoste, result) => {
   );
 };
 
+//find post with id
 Poste.findById = (posteId, result) => {
   connection.query(`SELECT * FROM Poster WHERE id = ${posteId}`, (err, res) => {
     if (err) {
@@ -48,6 +51,7 @@ Poste.findById = (posteId, result) => {
   });
 };
 
+// find All post
 Poste.getAll = (result) => {
   connection.query(
     "SELECT id , titre, description, image_link, user_id, date_cree, CONCAT_WS(' ', DAY(date_cree),'/',MONTH(date_cree),'/', YEAR(date_cree) , ' à: ', TIME(date_cree)) AS jolie_date FROM Poster",
@@ -64,6 +68,7 @@ Poste.getAll = (result) => {
   );
 };
 
+// update post
 Poste.updateById = (id, poste, result) => {
   connection.query(
     "UPDATE Poster SET titre = ?, description = ?, image_link = ?, date_modify = NOW() WHERE id = ?",
@@ -94,6 +99,7 @@ Poste.updateById = (id, poste, result) => {
   );
 };
 
+// delete post with id
 Poste.remove = (id, result) => {
   connection.query("DELETE FROM Poster WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -113,6 +119,7 @@ Poste.remove = (id, result) => {
   });
 };
 
+// delete All post
 Poste.removeAll = (result) => {
   connection.query("DELETE FROM Poster", (err, res) => {
     if (err) {
@@ -126,6 +133,11 @@ Poste.removeAll = (result) => {
   });
 };
 
+module.exports = Poste;
+
+//
+// Code Commenter test de depart pour like unlike garde en reserve
+/*
 Poste.likeById = (id, poste, result) => {
   connection.query(
     "UPDATE Poster SET  nb_likes = ?, WHERE id = ?",
@@ -179,5 +191,4 @@ Poste.dislikeById = (id, poste, result) => {
     }
   );
 };
-
-module.exports = Poste;
+*/
