@@ -1,4 +1,5 @@
 <template>
+  <!-- affiche les postes seulement si il en possede ou affiche phrase pas de poste actuellement-->
   <div
     v-if="postes && postes.some((poste) => poste.user_id == userConnect.id)"
     class=" d-flex flex-column my-5 align-items-center justify-content-center "
@@ -9,6 +10,7 @@
       class="largeur70 larg100 d-flex align-items-center my-5 justify-content-center card bordurePost bordureRond border-primary shadow"
     >
       <div class="card-body p-3 container-fluid">
+        <!-- debut information user  et suppression poste-->
         <div class="d-flex justify-content-between">
           <div class="d-flex">
             <img
@@ -78,7 +80,9 @@
             ></b-icon>
           </b-button>
         </div>
+        <!-- fin information user -->
 
+        <!-- debut corps du poste -->
         <h4 class=" largeur100 card-title">{{ poste.titre }}</h4>
         <div class=" my-3">
           <img
@@ -112,8 +116,9 @@
             {{ poste.description }}
           </div>
         </div>
+        <!-- fin corps du poste -->
 
-        <!-- likes -->
+        <!-- debut likes unlikes -->
 
         <div class="mb-3 d-flex bordurePost">
           <!--likes-->
@@ -200,9 +205,9 @@
             </div>
           </div>
         </div>
+        <!-- fin likes unlikes  -->
 
-        <!-- fin likes -->
-
+        <!-- debut affichage comments -->
         <div
           v-for="(comment, id) in comments.filter((comment) => {
             return comment.post_id == poste.id;
@@ -291,6 +296,9 @@
             ></b-icon>
           </b-button>
         </div>
+        <!-- fin affichage comments -->
+
+        <!-- debut envoie comment-->
         <form @submit.prevent="submit(poste)" class="mt-1 form-group">
           <label class="text-primary" for="commentaire"
             >Laisser un commentaire</label
@@ -351,6 +359,7 @@
           </p>
           <p class="typo__p" v-if="submitStatus === 'PENDING'">Sending...</p>
         </form>
+        <!-- fin envoie comment-->
       </div>
     </div>
   </div>
@@ -369,7 +378,6 @@ export default {
       commentaire: "",
       postes: [],
       users: [],
-      userDef: [],
       userConnect: [],
       comments: [],
       likes: [],
@@ -379,45 +387,25 @@ export default {
       submitStatus: null,
     };
   },
+  // valide comment
   validations: {
     commentaire: { required, maxLength: maxLength(200) },
   },
-
+  // filtre poste en fonction du choix du profil user
   computed: {
-    filterUser() {
-      return this.users.filter((user) => {
-        return user.id;
-      });
-    },
-    filterUserimage() {
-      return this.users.filter((user) => {
-        return user.image_url;
-      });
-    },
-    filterUsernom() {
-      return this.users.filter((user) => {
-        return user.nom;
-      });
-    },
     filterPost() {
       return this.postes.filter((poste) => {
         return poste.user_id == this.userConnect.id;
       });
     },
-
-    filterComm() {
-      return this.comments.filter((comment) => {
-        return comment.user_id == this.userConnect.id;
-      });
-    },
   },
 
+  // recupere differente route
   async created() {
     this.postes = [];
     this.users = [];
-    this.userDef = [];
     this.userConnect = [];
-    //this.postes = [];
+
     await axios
       .get("http://localhost:3000/postes")
       .then(
@@ -429,18 +417,6 @@ export default {
       .get("http://localhost:3000/users")
       .then(
         (response) => ((this.users = response.data), console.log(this.users))
-      )
-      .catch((error) => console.log(error));
-
-    await axios
-      .get("http://localhost:3000/users")
-      .then(
-        (response) => (
-          (this.userDef = response.data.find((user) => {
-            return user.id;
-          })),
-          console.log(this.userDef)
-        )
       )
       .catch((error) => console.log(error));
 
@@ -461,9 +437,26 @@ export default {
         )
       )
       .catch((error) => console.log(error));
+
+    await axios
+      .get("http://localhost:3000/likes")
+      .then(
+        (response) => ((this.likes = response.data), console.log(this.likes))
+      )
+      .catch((error) => console.log(error));
+
+    await axios
+      .get("http://localhost:3000/unlikes")
+      .then(
+        (response) => (
+          (this.unlikes = response.data), console.log(this.unlikes)
+        )
+      )
+      .catch((error) => console.log(error));
   },
 
   methods: {
+    // envoie comment
     async submit(poste) {
       console.log("requete ver serveur!");
       this.$v.$touch();
@@ -493,6 +486,8 @@ export default {
           );
       }
     },
+
+    // delete post
     deletePost(poste) {
       axios
         .delete(`http://localhost:3000/poste/${poste.id}`, {})
@@ -522,7 +517,7 @@ export default {
           console.log(error)
         );
     },
-
+    // ajoute like supprime unlike
     addLike(poste, unlike, like) {
       console.log(unlike);
       if (unlike) {
@@ -556,6 +551,8 @@ export default {
           );
       }
     },
+
+    // ajoute unlike supprime like
     addUnlike(poste, like, unlike) {
       console.log(like);
       if (like) {

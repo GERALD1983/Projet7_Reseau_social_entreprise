@@ -10,7 +10,9 @@
         alt="logo"
       />
     </div>
+    <!-- corps de page-->
     <div class="largeur80 larg100">
+      <!-- retrouve collegues-->
       <form class="justify-content-center form-inline py-3 my-2 my-lg-0">
         <input
           v-model="searchKey"
@@ -21,6 +23,9 @@
           aria-label="Search"
         />
       </form>
+      <!-- fin retrouve collegues -->
+
+      <!-- balise d'indications -->
       <div>
         <h3
           class="backPrimaire opacity mx-1 text-primary bordurePost bordureRond"
@@ -38,6 +43,9 @@
           ></b-icon-chevron-double-down>
         </h3>
       </div>
+      <!-- fin balise d'indications -->
+
+      <!-- affichage et choix user et suppresion pour admin -->
       <div class="hauteur h100">
         <div class="mt-5 d-flex flex-wrap">
           <div
@@ -77,8 +85,9 @@
           </div>
         </div>
       </div>
+      <!-- fin affichage user et suppression pour admin -->
     </div>
-
+    <!-- fin corps de page-->
     <div class="py-5 stopPadMarg bg-primary col-md-1">
       <img
         src="../assets/image/icon.png"
@@ -96,7 +105,7 @@ export default {
   data() {
     return {
       searchKey: "",
-      postes: [],
+      //postes: [],
       users: [],
       user_id: localStorage.getItem("userId"),
       userChoice: localStorage.getItem("userChoice"),
@@ -108,50 +117,12 @@ export default {
     };
   },
   async created() {
-    this.postes = [];
     this.users = [];
-
-    await axios
-      .get("http://localhost:3000/postes")
-      .then(
-        (response) => ((this.postes = response.data), console.log(response))
-      )
-      .catch((error) => console.log(error));
 
     await axios
       .get("http://localhost:3000/users")
       .then(
         (response) => ((this.users = response.data), console.log(this.users))
-      )
-      .catch((error) => console.log(error));
-
-    await axios
-      .get("http://localhost:3000/users")
-      .then(
-        (response) => (
-          (this.userDef = response.data.find((user) => {
-            return user.id;
-          })),
-          console.log(this.userDef)
-        )
-      )
-      .catch((error) => console.log(error));
-
-    await axios
-      .get(`http://localhost:3000/user/${this.user_id}`)
-      .then(
-        (response) => (
-          (this.userConnect = response.data), console.log(this.userConnect.id)
-        )
-      )
-      .catch((error) => console.log(error));
-
-    await axios
-      .get("http://localhost:3000/commentaires")
-      .then(
-        (response) => (
-          (this.comments = response.data), console.log(this.comments)
-        )
       )
       .catch((error) => console.log(error));
   },
