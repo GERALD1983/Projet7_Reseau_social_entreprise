@@ -58,7 +58,7 @@
 
           <input
             class="form-control"
-            type="text"
+            type="password"
             name="mdp"
             v-model.trim="$v.mdp.$model"
           />
