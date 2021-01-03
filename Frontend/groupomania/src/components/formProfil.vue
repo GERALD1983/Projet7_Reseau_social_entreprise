@@ -10,7 +10,7 @@
           width="120px"
           height="120px"
           class=" bordureProfil rounded-circle"
-          alt="logo"
+          alt="photo-profil"
         />
         <img
           v-else
@@ -19,6 +19,7 @@
           height="120px"
           class="
         bordureProfil rounded-circle"
+          alt="photo-profil-default"
         />
         <div>
           <button

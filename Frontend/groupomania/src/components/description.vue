@@ -33,12 +33,14 @@
           height="100px"
           class=" justify-content-left bordureProfil
           rounded-circle"
+          alt="photo-pageProfil-choice"
         />
         <img
           v-else
           src="../assets/image/icon.png"
           width="100px"
           class=" justify-content-left bordureProfil rounded-circle"
+          alt="photo-pageProfil-choice-default"
         />
       </div>
     </div>

@@ -31,12 +31,14 @@
               height="100px"
               class=" justify-content-left bordureProfil
           rounded-circle"
+              alt="photo-profil-post"
             />
             <img
               v-else
               src="../assets/image/icon.png"
               width="100px"
               class=" justify-content-left bordureProfil rounded-circle"
+              alt="logo-profil-default"
             />
             <div class="ml-3 align-item-center justify-content-center">
               <h5>
@@ -97,7 +99,7 @@
             class="card-img-top"
             height="400px"
             :src="poste.image_link"
-            alt="img-or-video"
+            alt="image-or-video"
           />
 
           <b-container
@@ -236,7 +238,7 @@
             height="60px"
             class=" mr-3 justify-content-left bordurePost
           rounded-circle"
-            alt=""
+            alt="photo-profil-comments"
           />
           <img
             v-else
@@ -245,7 +247,7 @@
             height="60px"
             class=" mr-3 justify-content-left bordurePost
           rounded-circle"
-            alt=""
+            alt="photo-profil-comments-logo"
           />
 
           <div
@@ -315,7 +317,7 @@
               height="50px"
               class=" mr-3 justify-content-left bordurePost
           rounded-circle"
-              alt=""
+              alt="photo-postComment-profil-connect"
             />
             <img
               v-else
@@ -324,7 +326,7 @@
               height="50px"
               class=" mr-3 justify-content-left bordurePost
           rounded-circle"
-              alt=""
+              alt="photo-postComment-profil-connect-logo"
             />
             <input
               type="text"

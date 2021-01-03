@@ -10,7 +10,7 @@
         class="color-secondary"
         width="200px"
         src="../assets/image/icon-left-font-monochrome-black.svg"
-        alt=""
+        alt="logo-titre"
     /></a>
     <!-- mobile button -->
     <button
