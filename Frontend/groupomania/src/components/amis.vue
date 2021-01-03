@@ -61,12 +61,14 @@
                 height="100px"
                 class=" justify-content-left bordureProfil
           rounded-circle"
+                alt="photo-profil-collegues"
               />
               <img
                 v-else
                 src="../assets/image/icon.png"
                 width="100px"
                 class=" justify-content-left bordureProfil rounded-circle"
+                alt="photo-profil-collegues-default"
               />
             </div>
             <div>
